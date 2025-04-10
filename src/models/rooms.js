@@ -4,6 +4,13 @@ module.exports = (sequelize, DataTypes) => {
         {
             gameTime: {
                 type: DataTypes.INTEGER
+            },
+            isActivate: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: true
+            }, 
+            code: {
+                type: DataTypes.INTEGER,
             }
         },
     )
