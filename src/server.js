@@ -1,6 +1,9 @@
 const config = require('./config/config')
 const app = require('./app')
+const {sequelize} = require('./models/index')
 
-app.listen(config.PORT || 3000, () => {
-    console.log('Server runs...')
+sequelize.sync().then(() => {
+    app.listen(config.PORT || 3000, () => {
+        console.log('Server runs...')
+    })
 })
