@@ -44,7 +44,92 @@ async function getJWT(req, res, next) {
     }
 }
 
+async function getInfo(req, res, next) {
+    try {
+        const data = await AdminService.getInfo(req.id.id)
+        return res.status(200).json({
+            success: true,
+            data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function getList(req, res, next) {
+    try {
+        const data = await AdminService.getList(req.id.id)
+        return res.status(200).json({
+            success: true,
+            data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function getInfoById(req, res, next) {
+    try {
+        const {adminId} = req.params
+        const data = await AdminService.getInfoById(req.id.id, adminId)
+        return res.status(200).json({
+            success: true,
+            data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function updateAdmin(req, res, next) {
+    try {
+        const {adminId} = req.params
+        const {error, value} = AdminSchema.updateAdminSchema.validate(req.body)
+
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: error.details.map(error => error.message)
+            })
+        }
+
+        await AdminService.updateAdmin(value, req.id.id, adminId)
+
+        return res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function deleteAdmin(req, res, next) {
+    try {
+        const {adminId} = req.params
+
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: error.details.map(error => error.message)
+            })
+        }
+
+        await AdminService.deleteAdmin(req.id.id, adminId)
+
+        return res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     createAdmin,
-    getJWT
+    getJWT,
+    getInfo,
+    getInfoById,
+    getList,
+    updateAdmin,
+    deleteAdmin
 }

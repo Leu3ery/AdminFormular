@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
             })
         }
 
-        req.id = jwt.verify(Token, config.JWT_SECRET)
+        req.id = jwt.verify(Token, config.JWT_SECRET_ADMIN)
         next()
     } catch (error) {
         next(error)
