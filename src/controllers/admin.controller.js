@@ -12,7 +12,7 @@ async function createAdmin(req, res, next) {
             })
         }
 
-        await AdminService.createAdmin(value)
+        await AdminService.createAdmin(value, req.id.id)
 
         return res.status(201).json({
             success: true
