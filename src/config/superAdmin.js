@@ -9,6 +9,7 @@ module.exports = async () => {
         }
     })
     const adminData = JSON.parse(config.SUPERADMIN_DATA)
+    adminData.password = await bcrypt.hash(adminData.password, parseInt(config.PASSWORD_SALT))
     if (!admin) {
         await Admins.create(adminData)
     } else {
