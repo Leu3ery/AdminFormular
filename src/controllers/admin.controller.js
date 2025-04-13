@@ -124,6 +124,57 @@ async function deleteAdmin(req, res, next) {
     }
 }
 
+async function connectLocationWithAdmin(req, res, next) {
+    try {
+        const {adminId} = req.params
+        const {error, value} = AdminSchema.connectLocationSchema.validate(req.body)
+
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: error.details.map(error => error.message)
+            })
+        }
+
+        await AdminService.connectLocationWithAdmin(adminId, value.locationId, req.id.id)
+
+        return res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function getAdminLocations(req, res, next) {
+    try {
+        const {adminId} = req.params
+        
+        const data = await AdminService.getAdminLocations(adminId, req.id.id)
+
+        return res.status(200).json({
+            success: true,
+            data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function deleteAdminLocation(req, res, next) {
+    try {
+        const {adminId, locationId} = req.params
+
+        await AdminService.deleteAdminLocation(adminId, locationId)
+
+        return res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     createAdmin,
     getJWT,
@@ -131,5 +182,8 @@ module.exports = {
     getInfoById,
     getList,
     updateAdmin,
-    deleteAdmin
+    deleteAdmin,
+    connectLocationWithAdmin,
+    getAdminLocations,
+    deleteAdminLocation
 }

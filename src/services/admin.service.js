@@ -2,7 +2,7 @@ const createError = require('http-errors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const config = require('../config/config')
-const {Admins} = require('../models')
+const {Admins, Locations, AdminsLocations} = require('../models')
 const utils = require('./utils')
 
 async function createAdmin(value, superadminId) {
@@ -117,6 +117,64 @@ async function deleteAdmin(superadminId, adminId) {
     await admin.destroy()
 }
 
+async function connectLocationWithAdmin(adminId, locationId, superadminId) {
+    const superadmin = await utils.isSuperAdmin(superadminId)
+
+    const admin = await Admins.findByPk(adminId) 
+    if (!admin) {
+        throw new createError(404, "Admin not found")
+    }
+
+    const location = await Locations.findByPk(locationId)
+    if (!location) {
+        throw new createError(404, "Location not found")
+    }
+
+    await AdminsLocations.create({
+        LocationId: locationId,
+        AdminId: adminId
+    })
+}
+
+async function getAdminLocations(adminId, currentAdminId) {
+    const admin = await Admins.findByPk(adminId) 
+    if (!admin) {
+        throw new createError(404, "Admin not found")
+    }
+
+    const currentAdmin = await Admins.findByPk(currentAdminId) 
+    if (!currentAdmin) {
+        throw new createError(404, "currentAdmin not found")
+    }
+
+    return await admin.getLocations()
+}
+
+async function deleteAdminLocation(adminId, locationId) {
+    const admin = await Admins.findByPk(adminId) 
+    if (!admin) {
+        throw new createError(404, "Admin not found")
+    }
+
+    const location = await Admins.findByPk(locationId) 
+    if (!location) {
+        throw new createError(404, "Location not found")
+    }
+
+    const association = await AdminsLocations.findOne({
+        where: {
+            adminId,
+            locationId
+        }
+    })
+
+    if (!association) {
+        throw new createError(404, "There is not such association")
+    }
+
+    await association.destroy()
+}
+
 module.exports = {
     createAdmin,
     getJWT,
@@ -124,5 +182,8 @@ module.exports = {
     getInfoById,
     getList,
     updateAdmin,
-    deleteAdmin
+    deleteAdmin,
+    connectLocationWithAdmin,
+    getAdminLocations,
+    deleteAdminLocation
 }

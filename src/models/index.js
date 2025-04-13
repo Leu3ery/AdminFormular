@@ -15,9 +15,10 @@ const Clients = require('./clients')(sequelize, DataTypes)
 const Achievements = require('./achievements')(sequelize, DataTypes)
 const Rooms = require('./rooms')(sequelize, DataTypes)
 const RoomsClientsAchievements = require('./RoomsClientsAchievements')(sequelize, DataTypes)
+const AdminsLocations = require('./AdminsLocations')(sequelize, DataTypes)
 
-Admins.belongsToMany(Locations, {through: 'AdminsLocations'})
-Locations.belongsToMany(Admins, {through: 'AdminsLocations'})
+Admins.belongsToMany(Locations, {through: AdminsLocations})
+Locations.belongsToMany(Admins, {through: AdminsLocations})
 
 Locations.hasMany(Games)
 Games.belongsTo(Locations)
@@ -46,5 +47,6 @@ module.exports = {
     Clients,
     Achievements,
     Rooms,
-    RoomsClientsAchievements
+    RoomsClientsAchievements,
+    AdminsLocations
 }

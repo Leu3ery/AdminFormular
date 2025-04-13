@@ -12,5 +12,8 @@ router.get('/:adminId', JWTAdminMiddleware, AdminController.getInfoById)
 router.put('/:adminId', JWTAdminMiddleware, AdminController.updateAdmin)
 router.delete('/adminId', JWTAdminMiddleware, AdminController.deleteAdmin)
 
+router.get('/:adminId/location', JWTAdminMiddleware, AdminController.getAdminLocations)
+router.post('/:adminId/location', JWTAdminMiddleware, AdminController.connectLocationWithAdmin)
+router.delete('/:adminId/location/:locationId', JWTAdminMiddleware, AdminController.deleteAdminLocation)
 
 module.exports = router
