@@ -150,7 +150,9 @@ async function getAdminLocations(adminId, currentAdminId) {
     return await admin.getLocations()
 }
 
-async function deleteAdminLocation(adminId, locationId) {
+async function deleteAdminLocation(adminId, locationId, superadminId) {
+    const superadmin = await utils.isSuperAdmin(superadminId)
+
     const admin = await Admins.findByPk(adminId) 
     if (!admin) {
         throw new createError(404, "Admin not found")

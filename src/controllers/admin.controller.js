@@ -165,7 +165,7 @@ async function deleteAdminLocation(req, res, next) {
     try {
         const {adminId, locationId} = req.params
 
-        await AdminService.deleteAdminLocation(adminId, locationId)
+        await AdminService.deleteAdminLocation(adminId, locationId, req.id.id)
 
         return res.status(200).json({
             success: true
