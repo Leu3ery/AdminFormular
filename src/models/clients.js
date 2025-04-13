@@ -19,9 +19,6 @@ module.exports = (sequelize, DataTypes) => {
             },
             photo: {
                 type: DataTypes.STRING
-            },
-            signature: {
-                type: DataTypes.STRING
             }
         },
         {
