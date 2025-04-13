@@ -3,18 +3,10 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const config = require('../config/config')
 const {Admins} = require('../models')
+const utils = require('./utils')
 
 async function createAdmin(value, superadminId) {
-    const admin = await Admins.findOne({
-        where: {
-            id: superadminId,
-            isSuperAdmin: true
-        }
-    })
-
-    if (!admin) {
-        throw new createError(404, "Superadmin not found")
-    }
+    const superadmin = await utils.isSuperAdmin(superadminId)
 
     value.password = await bcrypt.hash(value.password, parseInt(config.PASSWORD_SALT))
     await Admins.create(value)
@@ -27,7 +19,7 @@ async function getJWT(value) {
         }
     })
     if (!user) {
-        throw new createError(404, "User not found")
+        throw new createError(404, "Admin not found")
     }
 
     if (!await bcrypt.compare(value.password, user.password) ) {
@@ -68,6 +60,7 @@ async function getInfoById(currentAdminId, adminId) {
 }
 
 async function getList(superadminId) {
+    
     const admin = await Admins.findOne({
         where: {
             id: superadminId,
@@ -110,15 +103,7 @@ async function updateAdmin(value, superadminId, adminId) {
 }
 
 async function deleteAdmin(superadminId, adminId) {
-    const superadmin = await Admins.findOne({
-        where: {
-            id: superadminId,
-            isSuperAdmin: true
-        }
-    })
-    if (!superadmin) {
-        throw new createError(404, "Superadmin not found")
-    }
+    const superadmin = await utils.isSuperAdmin(superadminId)
 
     const admin = await Admins.findByPk(adminId) 
     if (!admin) {
