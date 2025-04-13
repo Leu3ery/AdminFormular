@@ -14,9 +14,44 @@ async function getList(superadminId) {
     return data
 }
 
+async function getInfo(locationId) {
+    const location = await Locations.findByPk(locationId)
 
+    if (!location) {
+        throw new createError(404, "Location not found")
+    }
+
+    return location
+}
+
+async function updateLocation(locationId, value, superadminId) {
+    const superadmin = await utils.isSuperAdmin(superadminId)
+    const location = await Locations.findByPk(locationId)
+
+    if (!location) {
+        throw new createError(404, "Location not found")
+    }
+
+    location.set(value)
+    await location.save()
+}
+
+async function deleteLocation(locationId, superadminId) {
+    const superadmin = await utils.isSuperAdmin(superadminId)
+
+    const location = await Locations.findByPk(locationId)
+
+    if (!location) {
+        throw new createError(404, "Location not found")
+    }
+
+    await location.destroy()
+}
 
 module.exports = {
     createLocation,
-    getList
+    getList,
+    getInfo,
+    updateLocation,
+    deleteLocation
 }
