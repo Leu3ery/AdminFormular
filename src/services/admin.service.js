@@ -12,7 +12,7 @@ async function createAdmin(value, superadminId) {
     await Admins.create(value)
 }
 
-async function getJWT(value) {
+async function getAdminJWT(value) {
     const user = await Admins.findOne({
         where: {
             username: value.username
@@ -28,7 +28,7 @@ async function getJWT(value) {
     return jwt.sign({id: user.id}, config.JWT_SECRET_ADMIN, {expiresIn: 60 * 60 * 24 * 7})
 }
 
-async function getInfo(adminId) {
+async function getAdminInfo(adminId) {
     const data = await Admins.findOne({
         attributes: ['firstName', 'lastName', 'username', 'isSuperAdmin'],
         where: {
@@ -41,7 +41,7 @@ async function getInfo(adminId) {
     return data
 }
 
-async function getInfoById(currentAdminId, adminId) {
+async function getAdminInfoById(currentAdminId, adminId) {
     const currentAdmin = await Admins.findByPk(currentAdminId)
     if (!currentAdmin) {
         throw new createError(404, "Admin not found")
@@ -59,7 +59,7 @@ async function getInfoById(currentAdminId, adminId) {
     return data
 }
 
-async function getList(superadminId) {
+async function getAdminList(superadminId) {
     
     const admin = await Admins.findOne({
         where: {
@@ -179,10 +179,10 @@ async function deleteAdminLocation(adminId, locationId, superadminId) {
 
 module.exports = {
     createAdmin,
-    getJWT,
-    getInfo,
-    getInfoById,
-    getList,
+    getAdminJWT,
+    getAdminInfo,
+    getAdminInfoById,
+    getAdminList,
     updateAdmin,
     deleteAdmin,
     connectLocationWithAdmin,

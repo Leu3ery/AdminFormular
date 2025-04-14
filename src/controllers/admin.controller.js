@@ -22,7 +22,7 @@ async function createAdmin(req, res, next) {
     }
 }
 
-async function getJWT(req, res, next) {
+async function getAdminJWT(req, res, next) {
     try {
         const {error, value} = AdminSchema.loginAdminSchema.validate(req.body)
 
@@ -33,7 +33,7 @@ async function getJWT(req, res, next) {
             })
         }
 
-        const jwt = await AdminService.getJWT(value)
+        const jwt = await AdminService.getAdminJWT(value)
 
         return res.status(200).json({
             success: true,
@@ -44,9 +44,9 @@ async function getJWT(req, res, next) {
     }
 }
 
-async function getInfo(req, res, next) {
+async function getAdminInfo(req, res, next) {
     try {
-        const data = await AdminService.getInfo(req.id.id)
+        const data = await AdminService.getAdminInfo(req.id.id)
         return res.status(200).json({
             success: true,
             data
@@ -56,9 +56,9 @@ async function getInfo(req, res, next) {
     }
 }
 
-async function getList(req, res, next) {
+async function getAdminList(req, res, next) {
     try {
-        const data = await AdminService.getList(req.id.id)
+        const data = await AdminService.getAdminList(req.id.id)
         return res.status(200).json({
             success: true,
             data
@@ -68,10 +68,10 @@ async function getList(req, res, next) {
     }
 }
 
-async function getInfoById(req, res, next) {
+async function getAdminInfoById(req, res, next) {
     try {
         const {adminId} = req.params
-        const data = await AdminService.getInfoById(req.id.id, adminId)
+        const data = await AdminService.getAdminInfoById(req.id.id, adminId)
         return res.status(200).json({
             success: true,
             data
@@ -177,10 +177,10 @@ async function deleteAdminLocation(req, res, next) {
 
 module.exports = {
     createAdmin,
-    getJWT,
-    getInfo,
-    getInfoById,
-    getList,
+    getAdminJWT,
+    getAdminInfo,
+    getAdminInfoById,
+    getAdminList,
     updateAdmin,
     deleteAdmin,
     connectLocationWithAdmin,

@@ -8,12 +8,12 @@ async function createLocation(value, superadminId) {
     await Locations.create(value)
 }
 
-async function getList() {
+async function getLocationList() {
     const data = await Locations.findAll()
     return data
 }
 
-async function getInfo(locationId) {
+async function getLocationInfo(locationId) {
     const location = await Locations.findByPk(locationId)
 
     if (!location) {
@@ -49,8 +49,8 @@ async function deleteLocation(locationId, superadminId) {
 
 module.exports = {
     createLocation,
-    getList,
-    getInfo,
+    getLocationList,
+    getLocationInfo,
     updateLocation,
     deleteLocation
 }

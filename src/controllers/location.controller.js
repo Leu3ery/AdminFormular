@@ -22,9 +22,9 @@ async function createLocation(req, res, next) {
     }
 }
 
-async function getList(req, res, next) {
+async function getLocationList(req, res, next) {
     try {
-        const data = await LocationService.getList()
+        const data = await LocationService.getLocationList()
         
         return res.status(200).json({
             success: true,
@@ -35,11 +35,11 @@ async function getList(req, res, next) {
     }
 }
 
-async function getInfo(req, res, next) {
+async function getLocationInfo(req, res, next) {
     try {
         const {locationId} = req.params
 
-        const data = await LocationService.getInfo(locationId)
+        const data = await LocationService.getLocationInfo(locationId)
 
         return res.status(200).json({
             success: true,
@@ -89,8 +89,8 @@ async function deleteLocation(req, res, next) {
 
 module.exports = {
     createLocation,
-    getList,
-    getInfo,
+    getLocationList,
+    getLocationInfo,
     updateLocation,
     deleteLocation
 }
