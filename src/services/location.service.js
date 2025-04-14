@@ -8,8 +8,7 @@ async function createLocation(value, superadminId) {
     await Locations.create(value)
 }
 
-async function getList(superadminId) {
-    const superadmin = await utils.isSuperAdmin(superadminId)
+async function getList() {
     const data = await Locations.findAll()
     return data
 }

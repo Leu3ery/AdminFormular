@@ -11,9 +11,6 @@ module.exports = (sequelize, DataTypes) => {
             }, 
             code: {
                 type: DataTypes.INTEGER,
-            },
-            clientSignature: {
-                type: DataTypes.STRING
             }
         },
     )

@@ -24,7 +24,7 @@ async function createLocation(req, res, next) {
 
 async function getList(req, res, next) {
     try {
-        const data = await LocationService.getList(req.id.id)
+        const data = await LocationService.getList()
         
         return res.status(200).json({
             success: true,
