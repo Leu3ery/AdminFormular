@@ -26,6 +26,8 @@ Admins.hasOne(Rooms)
 Rooms.belongsTo(Admins)
 Games.hasOne(Rooms)
 Rooms.belongsTo(Games)
+Locations.hasOne(Rooms)
+Rooms.belongsTo(Locations)
 
 
 Clients.belongsToMany(Rooms, {through: RoomsClients})
