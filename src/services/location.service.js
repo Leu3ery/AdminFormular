@@ -1,6 +1,6 @@
 const createError = require('http-errors')
 const utils = require('./utils')
-const {Locations, Admins} = require('../models')
+const {Locations} = require('../models')
 
 async function createLocation(value, superadminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)

@@ -19,13 +19,8 @@ const updateAdminSchema = Joi.object({
     username: Joi.string().min(3).max(64),
 }).min(1)
 
-const connectLocationSchema = Joi.object({
-    locationId: Joi.number()
-})
-
 module.exports = {
     createAdminSchema,
     loginAdminSchema,
-    updateAdminSchema,
-    connectLocationSchema
+    updateAdminSchema
 }

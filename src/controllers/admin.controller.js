@@ -12,7 +12,7 @@ async function createAdmin(req, res, next) {
             })
         }
 
-        await AdminService.createAdmin(value, req.id.id)
+        await AdminService.createAdmin(value, req.admin.id)
 
         return res.status(201).json({
             success: true
@@ -46,7 +46,7 @@ async function getAdminJWT(req, res, next) {
 
 async function getAdminInfo(req, res, next) {
     try {
-        const data = await AdminService.getAdminInfo(req.id.id)
+        const data = await AdminService.getAdminInfo(req.admin.id)
         return res.status(200).json({
             success: true,
             data
@@ -58,7 +58,7 @@ async function getAdminInfo(req, res, next) {
 
 async function getAdminList(req, res, next) {
     try {
-        const data = await AdminService.getAdminList(req.id.id)
+        const data = await AdminService.getAdminList(req.admin.id)
         return res.status(200).json({
             success: true,
             data
@@ -71,7 +71,7 @@ async function getAdminList(req, res, next) {
 async function getAdminInfoById(req, res, next) {
     try {
         const {adminId} = req.params
-        const data = await AdminService.getAdminInfoById(req.id.id, adminId)
+        const data = await AdminService.getAdminInfoById(req.admin.id, adminId)
         return res.status(200).json({
             success: true,
             data
@@ -93,7 +93,7 @@ async function updateAdmin(req, res, next) {
             })
         }
 
-        await AdminService.updateAdmin(value, req.id.id, adminId)
+        await AdminService.updateAdmin(value, req.admin.id, adminId)
 
         return res.status(200).json({
             success: true
@@ -114,7 +114,7 @@ async function deleteAdmin(req, res, next) {
             })
         }
 
-        await AdminService.deleteAdmin(req.id.id, adminId)
+        await AdminService.deleteAdmin(req.admin.id, adminId)
 
         return res.status(200).json({
             success: true
@@ -126,17 +126,9 @@ async function deleteAdmin(req, res, next) {
 
 async function connectLocationWithAdmin(req, res, next) {
     try {
-        const {adminId} = req.params
-        const {error, value} = AdminSchema.connectLocationSchema.validate(req.body)
+        const {adminId, locationId} = req.params
 
-        if (error) {
-            return res.status(400).json({
-                success: false,
-                message: error.details.map(error => error.message)
-            })
-        }
-
-        await AdminService.connectLocationWithAdmin(adminId, value.locationId, req.id.id)
+        await AdminService.connectLocationWithAdmin(adminId, locationId, req.admin.id)
 
         return res.status(200).json({
             success: true
@@ -150,7 +142,7 @@ async function getAdminLocations(req, res, next) {
     try {
         const {adminId} = req.params
         
-        const data = await AdminService.getAdminLocations(adminId, req.id.id)
+        const data = await AdminService.getAdminLocations(adminId, req.admin.id)
 
         return res.status(200).json({
             success: true,
@@ -165,7 +157,7 @@ async function deleteAdminLocation(req, res, next) {
     try {
         const {adminId, locationId} = req.params
 
-        await AdminService.deleteAdminLocation(adminId, locationId, req.id.id)
+        await AdminService.deleteAdminLocation(adminId, locationId, req.admin.id)
 
         return res.status(200).json({
             success: true

@@ -10,3 +10,7 @@ node_modules/
 
 # Інші тимчасові файли
 .DS_Store
+
+
+src/public
+

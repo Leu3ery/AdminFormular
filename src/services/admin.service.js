@@ -30,7 +30,7 @@ async function getAdminJWT(value) {
 
 async function getAdminInfo(adminId) {
     const data = await Admins.findOne({
-        attributes: ['firstName', 'lastName', 'username', 'isSuperAdmin'],
+        attributes: ['id', 'firstName', 'lastName', 'username', 'isSuperAdmin'],
         where: {
             id: adminId
         }
