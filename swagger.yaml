@@ -1,0 +1,518 @@
+openapi: 3.0.0
+
+info:
+  title: Admin
+  description: |
+    **In each response you will get json like this: {"success": false, "message?":"error text", }**
+
+  version: 0.0.0
+
+servers:
+  - url: http://localhost:8000/api
+    description: Dev local serverk
+
+paths:
+  /admin:
+    get:
+      summary:
+        "to get info by JWT"
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "info about admin"
+          content:
+            application/json:
+              schema:
+                type:
+                  object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      username:
+                        type: string
+                      isSuperAdmin:
+                        type: boolean
+  /admin/list:
+    get:
+      summary:
+        "to get list of admins if you superadmin"
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "list of admins"
+          content:
+            application/json:
+              schema:
+                type:
+                  object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: 
+                          type: integer
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        username:
+                          type: string
+                        isSuperAdmin:
+                          type: boolean
+  /admin/register:
+    post: 
+      summary:
+        "to create an admin you need to be superAdmin"
+      security:
+        - bearerAuth: []
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstName
+                - lastName
+                - username
+                - password
+              properties: 
+                firstName:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+                lastName:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+                password:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+      responses: 
+        "201":
+          description: "new admin created"
+  /admin/login:
+    post:
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties: 
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+                password:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+      responses: 
+        "200":
+          description: "JWT"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: 
+                    type: string
+  /admin/{adminId}:
+    get:
+      summary:
+        "to get info by adminId if you are superadmin"
+      parameters:
+        - in: path
+          name: adminId
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "info about admin"
+          content:
+            application/json:
+              schema:
+                type:
+                  object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      username:
+                        type: string
+                      isSuperAdmin:
+                        type: boolean
+    delete:
+      summary:
+        "to delete admin if you are superadmin"
+      parameters:
+        - in: path
+          name: adminId
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "admin was deleted"
+
+    put:
+      summary:
+        "to update an admin you need to be superAdmin"
+      parameters:
+        - in: path
+          name: adminId
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties: 
+                firstName:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+                lastName:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+                password:
+                  type: string
+                  minLength: 3
+                  maxLength: 64
+      responses: 
+        "200":
+          description: "admin updated"
+  /admin/{adminId}/location:
+    get:
+      summary:
+        "to get list of locations you need to be admin"
+      parameters:
+        - in: path
+          name: adminId
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "list of locations"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "address": "egalstrase",
+                      "city": "wien",
+                      "postcode": "1000",
+                      "phone": "+99999999",
+                      "mail": "wien@gmail.com",
+                      "createdAt": "2025-04-13T17:44:13.833Z",
+                      "updatedAt": "2025-04-13T17:44:13.833Z",
+                      "AdminsLocations": {
+                        "AdminId": 1,
+                        "LocationId": 1
+                      }
+                    }
+                  ]
+                }
+  /admin/{adminId}/location/{locationId}:
+    post:
+      summary:
+          "to connect admin with location you need to be superAdmin"
+      parameters:
+        - in: path
+          name: adminId          
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: locationId          
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "connection was successful"
+    delete:
+      summary:
+          "to delete connection between admin with location you need to be superAdmin"
+      parameters:
+        - in: path
+          name: adminId          
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: locationId          
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: 
+            "association was deleted"
+  /location:
+    post:
+      summary:
+        "to create location you need to be superadmin" 
+      security:
+        - bearerAuth: []       
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - address
+                - city
+                - postcode
+                - phone
+                - mail
+              properties:
+                address:
+                  type: string
+                city:
+                  type: string
+                postcode:
+                  type: string
+                phone:
+                  type: string
+                mail:
+                  type:
+                    string
+      responses:
+        "201":
+          description:
+            "location was created" 
+  /location/list:
+    get:
+      summary:
+        "list of locations"
+      responses:
+        "200":
+          description:
+            "list of locations"
+          content:
+            application/json:
+              schema:
+                type:
+                  object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        address:
+                          type: string
+                        city:
+                          type: string
+                        postcode:
+                          type: string
+                        phone:
+                          type: string
+                        mail:
+                          type: string
+                        createdAd:
+                          type: string  
+  /location/{locationId}:
+    get:
+      summary:
+        "info by locationId"
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "info about location"
+          content:
+            application/json:
+              schema:
+                type:
+                  object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                        id:
+                          type: integer
+                        address:
+                          type: string
+                        city:
+                          type: string
+                        postcode:
+                          type: string
+                        phone:
+                          type: string
+                        mail:
+                          type: string
+                        createdAd:
+                          type: string
+    put:
+      summary:
+        "to update location you need to be superadmin"
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                city:
+                  type: string
+                postcode:
+                  type: string
+                phone:
+                  type: string
+                mail:
+                  type: string
+      responses: 
+        "200": 
+          description: "location was updated"
+    delete:
+      summary:
+        "to delete location you need to be superadmin"
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description:
+            "location was deleted"
+  /location/{locationId}/game:
+    post:
+      summary:
+        "create game on location if you are admin"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - data
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                data:
+                  type: object
+                  required:
+                    - name
+                    - icon
+                    - color
+                    - maxPlayers
+                  properties:
+                    name:
+                      type: string
+                    color: 
+                      type: string
+                    maxPlayers:
+                      type: integer
+      responses:
+        "200":
+          description: "game was created"
+
+
+
+  
+      
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # Removed the semicolon and added a proper comment
