@@ -16,6 +16,26 @@ async function isSuperAdmin(superadminId) {
     }
 }
 
+async function findAdmin(adminId) {
+    const admin = await Admins.findByPk(adminId)
+    if (!admin) {
+        throw createError(404, "Admin not found")
+    } else {
+        return admin
+    }
+}
+
+async function findLocation(locationId) {
+    const location = await Admins.findByPk(locationId)
+    if (!location) {
+        throw createError(404, "Location not found")
+    } else {
+        return location
+    }
+}
+
 module.exports = {
-    isSuperAdmin
+    isSuperAdmin,
+    findAdmin,
+    findLocation
 }

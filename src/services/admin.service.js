@@ -60,17 +60,7 @@ async function getAdminInfoById(currentAdminId, adminId) {
 }
 
 async function getAdminList(superadminId) {
-    
-    const admin = await Admins.findOne({
-        where: {
-            id: superadminId,
-            isSuperAdmin: true
-        }
-    })
-
-    if (!admin) {
-        throw new createError(404, "Superadmin not found")
-    }
+    const superadmin = await utils.isSuperAdmin(superadminId)
 
     const data = await Admins.findAll({
         attributes: ['id', 'firstName', 'lastName', 'username', 'isSuperAdmin']
@@ -79,20 +69,8 @@ async function getAdminList(superadminId) {
 }
 
 async function updateAdmin(value, superadminId, adminId) {
-    const superadmin = await Admins.findOne({
-        where: {
-            id: superadminId,
-            isSuperAdmin: true
-        }
-    })
-    if (!superadmin) {
-        throw new createError(404, "Superadmin not found")
-    }
-
-    const admin = await Admins.findByPk(adminId)
-    if (!admin) {
-        throw new createError(404, "Admin not found")
-    }
+    const superadmin = await utils.isSuperAdmin(superadminId)
+    const admin = await utils.findAdmin(adminId)
 
     if (value.password) {
         value.password = await bcrypt.hash(value.password, parseInt(config.PASSWORD_SALT))
@@ -104,11 +82,7 @@ async function updateAdmin(value, superadminId, adminId) {
 
 async function deleteAdmin(superadminId, adminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)
-
-    const admin = await Admins.findByPk(adminId) 
-    if (!admin) {
-        throw new createError(404, "Admin not found")
-    }
+    const admin = await utils.findAdmin(adminId)
 
     if (admin.username == superadmin.username) {
         throw new createError(400, "You cant delete yourself")
@@ -119,16 +93,8 @@ async function deleteAdmin(superadminId, adminId) {
 
 async function connectLocationWithAdmin(adminId, locationId, superadminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)
-
-    const admin = await Admins.findByPk(adminId) 
-    if (!admin) {
-        throw new createError(404, "Admin not found")
-    }
-
-    const location = await Locations.findByPk(locationId)
-    if (!location) {
-        throw new createError(404, "Location not found")
-    }
+    const admin = await utils.findAdmin(adminId)
+    const location = await utils.findLocation(locationId)
 
     await AdminsLocations.create({
         LocationId: locationId,
@@ -137,10 +103,7 @@ async function connectLocationWithAdmin(adminId, locationId, superadminId) {
 }
 
 async function getAdminLocations(adminId, currentAdminId) {
-    const admin = await Admins.findByPk(adminId) 
-    if (!admin) {
-        throw new createError(404, "Admin not found")
-    }
+    const admin = await utils.findAdmin(adminId)
 
     const currentAdmin = await Admins.findByPk(currentAdminId) 
     if (!currentAdmin) {
@@ -152,16 +115,8 @@ async function getAdminLocations(adminId, currentAdminId) {
 
 async function deleteAdminLocation(adminId, locationId, superadminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)
-
-    const admin = await Admins.findByPk(adminId) 
-    if (!admin) {
-        throw new createError(404, "Admin not found")
-    }
-
-    const location = await Admins.findByPk(locationId) 
-    if (!location) {
-        throw new createError(404, "Location not found")
-    }
+    const admin = await utils.findAdmin(adminId)
+    const location = await utils.findLocation(locationId)
 
     const association = await AdminsLocations.findOne({
         where: {

@@ -139,6 +139,22 @@ async function createGameOnLocation(req, res, next) {
     }
 }
 
+async function getGameListOnLocation(req, res, next) { 
+    try {
+        const {locatoinId} = req.params
+        const adminId = req.admin.id
+
+        const data = await GameService.getGameListOnLocation(locatoinId, adminId)
+
+        return res.status(200).json({
+            success: true,
+            data: data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     createLocation,
     getLocationList,

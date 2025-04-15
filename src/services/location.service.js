@@ -14,22 +14,14 @@ async function getLocationList() {
 }
 
 async function getLocationInfo(locationId) {
-    const location = await Locations.findByPk(locationId)
-
-    if (!location) {
-        throw new createError(404, "Location not found")
-    }
+    const location = await utils.findLocation(locationId)
 
     return location
 }
 
 async function updateLocation(locationId, value, superadminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)
-    const location = await Locations.findByPk(locationId)
-
-    if (!location) {
-        throw new createError(404, "Location not found")
-    }
+    const location = await utils.findLocation(locationId)
 
     location.set(value)
     await location.save()
@@ -37,12 +29,7 @@ async function updateLocation(locationId, value, superadminId) {
 
 async function deleteLocation(locationId, superadminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)
-
-    const location = await Locations.findByPk(locationId)
-
-    if (!location) {
-        throw new createError(404, "Location not found")
-    }
+    const location = await utils.findLocation(locationId)
 
     await location.destroy()
 }
