@@ -505,6 +505,133 @@ paths:
       responses:
         "200":
           description: "game was created"
+    get:
+      summary:
+        "get all games on location"
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description:
+            "list of games"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "name": "string",
+                      "icon": "1744748725285-837733886.gif",
+                      "color": "string",
+                      "maxPlayers": 0,
+                      "LocationId": 1
+                    }
+                  ]
+                }
+  /location/{locationId}/game/{gameId}:
+    get:
+      summary:
+        "get game on location"
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: gameId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description:
+            "game info"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 1,
+                    "name": "string",
+                    "icon": "1744748725285-837733886.gif",
+                    "color": "string",
+                    "maxPlayers": 0,
+                    "LocationId": 1
+                  }
+                }
+    delete:
+      summary:
+        "delete game on location"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: gameId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description:
+            "game was deleted"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                }
+    put:
+      summary:
+        "update game on location"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: gameId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                data:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    color: 
+                      type: string
+                    maxPlayers:
+                      type: integer
+      responses:
+        "200":
+          description: 
+            "game was updated"
+
 
 
 

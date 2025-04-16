@@ -141,14 +141,71 @@ async function createGameOnLocation(req, res, next) {
 
 async function getGameListOnLocation(req, res, next) { 
     try {
-        const {locatoinId} = req.params
-        const adminId = req.admin.id
+        const {locationId} = req.params
 
-        const data = await GameService.getGameListOnLocation(locatoinId, adminId)
+        const data = await GameService.getGameListOnLocation(locationId)
 
         return res.status(200).json({
             success: true,
             data: data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function getGameInfoOnLocation(req, res, next) {
+    try {
+        const {locationId, gameId} = req.params
+
+        const data = await GameService.getGameInfoOnLocation(locationId, gameId)
+
+        return res.status(200).json({
+            success: true,
+            data: data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function deleteGameOnLocation(req, res, next) {
+    try {
+        const {locationId, gameId} = req.params
+        const adminId = req.admin.id
+
+        await GameService.deleteGameOnLocation(locationId, gameId, adminId)
+
+        return res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function updateGameOnLocation(req, res, next) {
+    try {
+        const {locationId, gameId} = req.params
+        const adminId = req.admin.id
+        const jsonData = req.body.data ? JSON.parse(req.body.data) : {}
+        if (req.file?.filename) {
+            jsonData.icon = req.file?.filename
+        }
+        const {error, value} = GameSchema.updateGameOnLocation.validate(jsonData)
+
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: error.details.map(error => error.message)
+            })
+        }
+        
+        const newObject = await GameService.updateGameOnLocation(locationId, gameId, adminId, value)
+
+        return res.status(200).json({
+            success: true,
+            data: newObject
         })
     } catch (error) {
         next(error)
@@ -161,5 +218,9 @@ module.exports = {
     getLocationInfo,
     updateLocation,
     deleteLocation,
-    createGameOnLocation
+    createGameOnLocation,
+    getGameListOnLocation,
+    getGameInfoOnLocation,
+    deleteGameOnLocation,
+    updateGameOnLocation
 }

@@ -1,4 +1,4 @@
-const {Admins} = require('../models')
+const {Admins, Locations, Games} = require('../models')
 const createError = require('http-errors')
 
 async function isSuperAdmin(superadminId) {
@@ -26,7 +26,7 @@ async function findAdmin(adminId) {
 }
 
 async function findLocation(locationId) {
-    const location = await Admins.findByPk(locationId)
+    const location = await Locations.findByPk(locationId)
     if (!location) {
         throw createError(404, "Location not found")
     } else {
@@ -34,8 +34,18 @@ async function findLocation(locationId) {
     }
 }
 
+async function findGame(gameId) {
+    const game = await Games.findByPk(gameId)
+    if (!game) {
+        throw createError(404, "Game not found")
+    } else {
+        return game
+    }
+}
+
 module.exports = {
     isSuperAdmin,
     findAdmin,
-    findLocation
+    findLocation,
+    findGame
 }

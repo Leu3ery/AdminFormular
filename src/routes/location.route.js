@@ -14,9 +14,9 @@ router.delete('/:locationId', JWTAdminMiddleware, LocationController.deleteLocat
 
 // TO CODE
 router.post('/:locationId/game', JWTAdminMiddleware, upload.single('file'), LocationController.createGameOnLocation)
-router.get('/:locationId/game', JWTAdminMiddleware, LocationController.getGameListOnLocation)
-// router.get('/:locationId/game/:gameId', JWTAdminMiddleware, LocationController.getGameInfoOnLocation)
-// router.put('/:locationId/game/:gameId', JWTAdminMiddleware, LocationController.updateGameOnLocation)
-// router.delete('/:locationId/game/:gameId', JWTAdminMiddleware, LocationController.deleteGameOnLocation)
+router.get('/:locationId/game', LocationController.getGameListOnLocation)
+router.get('/:locationId/game/:gameId', LocationController.getGameInfoOnLocation)
+router.put('/:locationId/game/:gameId', JWTAdminMiddleware, upload.single('file'), LocationController.updateGameOnLocation)
+router.delete('/:locationId/game/:gameId', JWTAdminMiddleware, LocationController.deleteGameOnLocation)
 
 module.exports = router
