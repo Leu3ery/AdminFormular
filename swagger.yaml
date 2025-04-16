@@ -111,6 +111,19 @@ paths:
       responses: 
         "201":
           description: "new admin created"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 3,
+                    "firstName": "string",
+                    "lastName": "string",
+                    "username": "string",
+                    "isSuperAdmin": false
+                  }
+                }
   /admin/login:
     post:
       requestBody: 
@@ -231,6 +244,19 @@ paths:
       responses: 
         "200":
           description: "admin updated"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 2,
+                    "firstName": "lol",
+                    "lastName": "kek",
+                    "username": "cheburek",
+                    "isSuperAdmin": false
+                  }
+                }
   /admin/location:
     get:
       summary:
@@ -375,6 +401,22 @@ paths:
         "201":
           description:
             "location was created" 
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 3,
+                    "address": "string",
+                    "city": "string",
+                    "postcode": "string",
+                    "phone": "string",
+                    "mail": "string",
+                    "updatedAt": "2025-04-16T10:22:14.845Z",
+                    "createdAt": "2025-04-16T10:22:14.845Z"
+                  }
+                }
   /location/list:
     get:
       summary:
@@ -481,6 +523,22 @@ paths:
       responses: 
         "200": 
           description: "location was updated"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 2,
+                    "address": "lol",
+                    "city": "lol",
+                    "postcode": "lol",
+                    "phone": "lol",
+                    "mail": "lol",
+                    "createdAt": "2025-04-16T10:21:36.321Z",
+                    "updatedAt": "2025-04-16T10:28:13.311Z"
+                  }
+                }
     delete:
       summary:
         "to delete location you need to be superadmin"
@@ -537,6 +595,20 @@ paths:
       responses:
         "200":
           description: "game was created"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 2,
+                    "name": "string",
+                    "color": "string",
+                    "maxPlayers": 0,
+                    "icon": "1744799370427-383776702.png",
+                    "LocationId": 2
+                  }
+                }
     get:
       summary:
         "get all games on location"

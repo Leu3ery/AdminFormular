@@ -12,10 +12,11 @@ async function createAdmin(req, res, next) {
             })
         }
 
-        await AdminService.createAdmin(value, req.admin.id)
+        const data = await AdminService.createAdmin(value, req.admin.id)
 
         return res.status(201).json({
-            success: true
+            success: true,
+            data: data
         })
     } catch (error) {
         next(error)

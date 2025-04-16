@@ -14,10 +14,11 @@ async function createLocation(req, res, next) {
             })
         }
 
-        await LocationService.createLocation(value, req.admin.id)
+        const data = await LocationService.createLocation(value, req.admin.id)
         
         return res.status(201).json({
-            success: true
+            success: true,
+            data: data
         })
     } catch (error) {
         next(error)
@@ -65,10 +66,11 @@ async function updateLocation(req, res, next) {
             })
         }
 
-        await LocationService.updateLocation(locationId, value, req.admin.id)
+        const location = await LocationService.updateLocation(locationId, value, req.admin.id)
         
         return res.status(200).json({
-            success: true
+            success: true,
+            data: location
         })
     } catch (error) {
         next(error)

@@ -5,7 +5,7 @@ const {Locations} = require('../models')
 async function createLocation(value, superadminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)
 
-    await Locations.create(value)
+    return await Locations.create(value)
 }
 
 async function getLocationList() {
@@ -25,6 +25,7 @@ async function updateLocation(locationId, value, superadminId) {
 
     location.set(value)
     await location.save()
+    return location
 }
 
 async function deleteLocation(locationId, superadminId) {

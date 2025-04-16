@@ -9,7 +9,8 @@ async function createAdmin(value, superadminId) {
     const superadmin = await utils.isSuperAdmin(superadminId)
 
     value.password = await bcrypt.hash(value.password, parseInt(config.PASSWORD_SALT))
-    await Admins.create(value)
+    const admin = await Admins.create(value)
+    return await Admins.findByPk(admin.id, { attributes: { exclude: ['password'] } })
 }
 
 async function getAdminJWT(value) {
