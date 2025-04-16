@@ -78,6 +78,7 @@ async function updateAdmin(value, superadminId, adminId) {
 
     admin.set(value)
     await admin.save()
+    return await Admins.findByPk(adminId, { attributes: { exclude: ['password'] } });
 }
 
 async function deleteAdmin(superadminId, adminId) {
@@ -102,14 +103,16 @@ async function connectLocationWithAdmin(adminId, locationId, superadminId) {
     })
 }
 
-async function getAdminLocations(adminId, currentAdminId) {
+async function getAdminLocations(adminId, locationsFromAdminId) {
+    const superadmin = await utils.isSuperAdmin(adminId)
+    const admin = await utils.findAdmin(locationsFromAdminId)
+
+    return await admin.getLocations()
+}
+
+async function getMyLocations(adminId) {
     const admin = await utils.findAdmin(adminId)
-
-    const currentAdmin = await Admins.findByPk(currentAdminId) 
-    if (!currentAdmin) {
-        throw new createError(404, "currentAdmin not found")
-    }
-
+    
     return await admin.getLocations()
 }
 
@@ -142,5 +145,6 @@ module.exports = {
     deleteAdmin,
     connectLocationWithAdmin,
     getAdminLocations,
+    getMyLocations,
     deleteAdminLocation
 }

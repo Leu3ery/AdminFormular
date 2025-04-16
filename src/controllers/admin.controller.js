@@ -93,10 +93,11 @@ async function updateAdmin(req, res, next) {
             })
         }
 
-        await AdminService.updateAdmin(value, req.admin.id, adminId)
+        const data = await AdminService.updateAdmin(value, req.admin.id, adminId)
 
         return res.status(200).json({
-            success: true
+            success: true,
+            data: data
         })
     } catch (error) {
         next(error)
@@ -153,6 +154,20 @@ async function getAdminLocations(req, res, next) {
     }
 }
 
+async function getMyLocations(req, res, next) {
+    try {
+        const adminId = req.admin.id
+        const data = await AdminService.getMyLocations(adminId)
+
+        return res.status(200).json({
+            success: true,
+            data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 async function deleteAdminLocation(req, res, next) {
     try {
         const {adminId, locationId} = req.params
@@ -177,5 +192,6 @@ module.exports = {
     deleteAdmin,
     connectLocationWithAdmin,
     getAdminLocations,
+    getMyLocations,
     deleteAdminLocation
 }

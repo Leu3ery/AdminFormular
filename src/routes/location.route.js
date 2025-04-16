@@ -12,7 +12,6 @@ router.get('/:locationId', LocationController.getLocationInfo)
 router.put('/:locationId', JWTAdminMiddleware, LocationController.updateLocation) 
 router.delete('/:locationId', JWTAdminMiddleware, LocationController.deleteLocation)
 
-// TO CODE
 router.post('/:locationId/game', JWTAdminMiddleware, upload.single('file'), LocationController.createGameOnLocation)
 router.get('/:locationId/game', LocationController.getGameListOnLocation)
 router.get('/:locationId/game/:gameId', LocationController.getGameInfoOnLocation)
