@@ -109,13 +109,6 @@ async function deleteAdmin(req, res, next) {
     try {
         const {adminId} = req.params
 
-        if (error) {
-            return res.status(400).json({
-                success: false,
-                message: error.details.map(error => error.message)
-            })
-        }
-
         await AdminService.deleteAdmin(req.admin.id, adminId)
 
         return res.status(200).json({

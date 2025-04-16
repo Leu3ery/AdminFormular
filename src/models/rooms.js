@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
         'Rooms',
         {
             gameTime: {
-                type: DataTypes.INTEGER
+                type: DataTypes.INTEGER,
+                defaultValue: 0
             },
             isActivate: {
                 type: DataTypes.BOOLEAN,
@@ -11,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
             }, 
             code: {
                 type: DataTypes.INTEGER,
+                allowNull: true,
+                unique: true
             }
         },
     )
