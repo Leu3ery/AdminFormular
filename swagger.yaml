@@ -749,12 +749,6 @@ paths:
                     "LocationId": 1
                   }
                 }
-
-
-
-
-  
-      
 components:
   securitySchemes:
     bearerAuth:
