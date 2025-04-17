@@ -137,7 +137,7 @@ async function getAdminLocations(req, res, next) {
     try {
         const {adminId} = req.params
         
-        const data = await AdminService.getAdminLocations(adminId, req.admin.id)
+        const data = await AdminService.getAdminLocations(req.admin.id, adminId)
 
         return res.status(200).json({
             success: true,
