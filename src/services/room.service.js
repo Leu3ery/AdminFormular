@@ -8,7 +8,7 @@ async function createRoom(AdminId, data) {
     const game = await utils.findGame(GameId)
     const admin = await utils.findAdmin(AdminId)
 
-    if (!location.hasAdmin(admin) || !location.hasGame(game)) {
+    if ((!location.hasAdmin(admin) && admin.isSuperAdmin) || !location.hasGame(game)) {
         throw new createError(400, "Location has no this admin or game")
     }
 
@@ -31,6 +31,59 @@ async function createRoom(AdminId, data) {
     return room
 }
 
+async function getRoomInfo(adminId, roomId) {
+    const admin = await utils.findAdmin(adminId)
+    const room = await utils.findRoom(roomId)
+    return room
+}
+
+async function getRoomList(adminId, query) {
+    //limit + offset + isActivate + locationId + adminId
+    const admin = await utils.findAdmin(adminId)
+
+    const request = {
+        where: {}
+    }
+
+    if (query.limit) request.limit = query.limit
+    if (query.offset) request.offset = query.offset
+    if (query.isActivate != undefined) request.where.isActivate = query.isActivate
+    if (query.locationId) request.where.LocationId = query.locationId
+    if (query.adminId) request.where.AdminId = query.adminId
+
+    const room = await Rooms.findAll(request)
+    return room
+}
+
+async function updateRoom(adminId, roomId, value) {
+    const admin = await utils.findAdmin(adminId)
+    const room = await utils.findRoom(roomId)
+    const location = await utils.findLocation(room.LocationId)
+
+
+    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
+        throw new createError(400, "Location has no this admin")
+    }
+
+    const updateData = {}
+    if (value.gameId) {
+        const game = await utils.findGame(value.gameId)
+        if (!location.hasGame(game)) {
+            throw new createError(400, "Location has no this game")
+        }
+        updateData.GameId = value.gameId
+    }
+    if (value.gameTime) updateData.gameTime = value.gameTime
+
+    room.set(updateData)
+    await room.save()
+    return room
+
+}
+
 module.exports = {
-    createRoom
+    createRoom,
+    getRoomInfo,
+    getRoomList,
+    updateRoom
 }

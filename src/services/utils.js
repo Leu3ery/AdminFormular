@@ -1,4 +1,4 @@
-const {Admins, Locations, Games} = require('../models')
+const {Admins, Locations, Games, Rooms} = require('../models')
 const createError = require('http-errors')
 
 async function isSuperAdmin(superadminId) {
@@ -43,6 +43,15 @@ async function findGame(gameId) {
     }
 }
 
+async function findRoom(roomId) {
+    const room = await Rooms.findByPk(roomId)
+    if (!room) {
+        throw createError(404, "Room not found")
+    } else {
+        return room
+    }
+}
+
 function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
@@ -54,5 +63,6 @@ module.exports = {
     findAdmin,
     findLocation,
     findGame,
+    findRoom,
     getRandomInt
 }
