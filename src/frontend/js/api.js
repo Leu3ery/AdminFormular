@@ -66,8 +66,9 @@
      post: (path, body)  => request(path, { method: "POST", body }),
      put:  (path, body)  => request(path, { method: "PUT",  body }),
      del:  (path)        => request(path, { method: "DELETE" }),
-     /* multipart upload (file + other fields wrapped in FormData) */
-     upload: (path, formData) => request(path, { method: "POST", body: formData }),
+     /* multipart upload (file + інші поля, FormData).
+     method — "POST" або "PUT" */
+     upload: (path, formData, method = "POST") => request(path, { method, body: formData }),
    
      /* token utils re‑exported for auth.js */
      setToken,

@@ -105,6 +105,7 @@
    async function fetchMe() {
      const me = await api.get("/admin");   // GET /admin → info by JWT
      currentUser = me;
+     updateUI(); 
      notifyAuthChange();
    }
    

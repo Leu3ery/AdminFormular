@@ -132,4 +132,8 @@
   .toast-body {
     color: var(--text-main);
   }
+
+  .modal-open .navbar {
+    display: none !important;
+  }
   
