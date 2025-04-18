@@ -137,3 +137,29 @@
     display: none !important;
   }
   
+  /* ───────────────────────────────────────────
+   Toast position / sizing
+   ─────────────────────────────────────────── */
+#toastContainer {
+  position: fixed;          /* перекриємо inline‑style з index.html */
+  top: 1rem;
+  right: 1rem;
+  z-index: 1080;
+  max-width: 380px;         /* щоб тост не був надто широким */
+  pointer-events: none;     /* кліки проходять крізь контейнер */
+}
+
+#toastContainer .toast {
+  width: 100%;
+  pointer-events: auto;     /* але сам тост клікабельний */
+}
+
+/* на дуже вузьких екранах (≤576 px) переносимо вниз по центру */
+@media (max-width: 576px) {
+  #toastContainer {
+    top: auto;
+    bottom: 1rem;
+    right: 50%;
+    transform: translateX(50%);
+  }
+}

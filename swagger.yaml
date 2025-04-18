@@ -157,7 +157,7 @@ paths:
   /admin/{adminId}:
     get:
       summary:
-        "to get info by adminId if you are superadmin"
+        "to get info by adminId if you are admin"
       parameters:
         - in: path
           name: adminId

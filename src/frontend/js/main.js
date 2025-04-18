@@ -35,7 +35,7 @@
      if (!user) return;                 // ще не залогінилися
    
      /* звичайному адмінові — лише Games */
-     if (!user.isSuperAdmin && page !== "games") {
+     if (!user.isSuperAdmin && !["games", "rooms"].includes(page)) {
        showToast("Access denied: super‑admin only", "danger");
        return;
      }
