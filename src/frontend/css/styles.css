@@ -1,0 +1,135 @@
+/* css/styles.css */
+/* ───────────────────────────────────────────
+   Minimal dark palette
+   ─────────────────────────────────────────── */
+   :root {
+    --bg-body:        #121212;
+    --bg-surface:     #1c1c1c;
+    --bg-elevated:    #242424;
+    --border-color:   #333;
+    --text-main:      #e0e0e0;
+    --text-muted:     #9a9a9a;
+    --accent:         #0d6efd;   /* Bootstrap primary */
+    --danger:         #dc3545;   /* Bootstrap danger  */
+  }
+  
+  /* ───────────────────────────────────────────
+     Global
+     ─────────────────────────────────────────── */
+  html,
+  body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+  }
+  
+  a,
+  .btn-link {
+    color: var(--accent);
+  }
+  
+  a:hover,
+  a:focus {
+    color: lighten(var(--accent), 10%);
+    text-decoration: none;
+  }
+  
+  /* ───────────────────────────────────────────
+     Navbar
+     ─────────────────────────────────────────── */
+  .navbar {
+    background-color: var(--bg-surface) !important;
+  }
+  
+  .navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .nav-link {
+    color: var(--text-muted) !important;
+    transition: color 0.15s ease-in-out;
+  }
+  
+  .nav-link.active,
+  .nav-link:hover {
+    color: var(--accent) !important;
+  }
+  
+  /* ───────────────────────────────────────────
+     Containers / Cards
+     ─────────────────────────────────────────── */
+  .card,
+  .modal-content,
+  .dropdown-menu {
+    background-color: var(--bg-elevated);
+    border-color: var(--border-color);
+  }
+  
+  .table {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+  }
+  
+  .table thead th {
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  /* ───────────────────────────────────────────
+     Forms
+     ─────────────────────────────────────────── */
+  .form-control,
+  .form-select {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+  }
+  
+  .form-control:focus,
+  .form-select:focus {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  
+  /* file input preview image */
+  .img-preview {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+  }
+  
+  /* ───────────────────────────────────────────
+     Buttons
+     ─────────────────────────────────────────── */
+  .btn-outline-danger {
+    --bs-btn-color: var(--danger);
+    --bs-btn-border-color: var(--danger);
+    --bs-btn-hover-bg: var(--danger);
+    --bs-btn-hover-border-color: var(--danger);
+  }
+  
+  /* small utility spacing */
+  .gap-2 > * {
+    margin-right: .5rem;
+  }
+  
+  /* toast */
+  .toast {
+    background-color: var(--bg-elevated);
+    border-color: var(--border-color);
+    color: var(--text-main);
+  }
+  
+  .toast-body {
+    color: var(--text-main);
+  }
+  

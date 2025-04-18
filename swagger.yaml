@@ -749,6 +749,50 @@ paths:
                     "LocationId": 1
                   }
                 }
+  /room:
+    post:
+      summary: "create new location"
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - LocationId
+                - GameId
+              properties:
+                LocationId:
+                  type: integer
+                GameId:
+                  type: integer
+      responses:
+        "200":
+          description: "room was created"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "gameTime": 0,
+                    "isActivate": true,
+                    "id": 3,
+                    "AdminId": 1,
+                    "LocationId": 1,
+                    "GameId": 1,
+                    "code": 3468,
+                    "updatedAt": "2025-04-16T21:40:44.795Z",
+                    "createdAt": "2025-04-16T21:40:44.795Z"
+                  }
+                }
+
+
+
+
+  
+      
 components:
   securitySchemes:
     bearerAuth:
