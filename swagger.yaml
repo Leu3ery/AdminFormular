@@ -751,7 +751,7 @@ paths:
                 }
   /room:
     post:
-      summary: "create new location"
+      summary: "create new room"
       security:
         - bearerAuth: []
       requestBody:

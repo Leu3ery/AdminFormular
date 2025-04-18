@@ -4,7 +4,8 @@ function validationWrapper(schema, data) {
     const {error, value} = schema.validate(data, {abortEarly: false})
 
     if (error) {
-        throw new createError(400, error.details.map(d => d.message))
+        console.log(error)
+        throw new createError(400, error.details.reduce((m1, m2) => m1.message + " " + m2.message))
     }
 
     return value
