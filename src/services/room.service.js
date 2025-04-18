@@ -15,6 +15,7 @@ async function createRoom(AdminId, data) {
     let code = utils.getRandomInt(1000, 10000)
     while(await Rooms.findOne({
         where: {
+            isActivate: true,
             code
         }
     })) {
@@ -78,12 +79,66 @@ async function updateRoom(adminId, roomId, value) {
     room.set(updateData)
     await room.save()
     return room
+}
 
+async function deleteRoom(adminId, roomId) {
+    const admin = await utils.findAdmin(adminId)
+    const room = await utils.findRoom(roomId)
+    const location = await utils.findLocation(room.LocationId)
+
+    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
+        throw new createError(400, "Location has no this admin")
+    }
+
+    await room.destroy()
+}
+
+async function closeRoom(adminId, roomId) {
+    const admin = await utils.findAdmin(adminId)
+    const room = await utils.findRoom(roomId)
+    const location = await utils.findLocation(room.LocationId)
+
+    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
+        throw new createError(400, "Location has no this admin")
+    }
+
+    room.isActivate = false
+    room.code = null
+    await room.save()
+    return room
+}
+
+async function openRoom(adminId, roomId) {
+    const admin = await utils.findAdmin(adminId)
+    const room = await utils.findRoom(roomId)
+    const location = await utils.findLocation(room.LocationId)
+
+    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
+        throw new createError(400, "Location has no this admin")
+    }
+
+    let code = utils.getRandomInt(1000, 10000)
+    while(await Rooms.findOne({
+        where: {
+            isActivate: true,
+            code
+        }
+    })) {
+        code = utils.getRandomInt(1000, 10000)
+    }
+
+    room.isActivate = true
+    room.code = code
+    await room.save()
+    return room
 }
 
 module.exports = {
     createRoom,
     getRoomInfo,
     getRoomList,
-    updateRoom
+    updateRoom,
+    deleteRoom,
+    closeRoom,
+    openRoom
 }

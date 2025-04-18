@@ -48,9 +48,45 @@ async function updateRoom(req, res, next) {
     }
 }
 
+async function deleteRoom(req, res, next) {
+    try {
+        const adminId = req.admin.id
+        const roomId = req.params.roomId
+        await RoomService.deleteRoom(adminId, roomId)
+        success(res, 200)
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function closeRoom(req, res, next) {
+    try {
+        const adminId = req.admin.id
+        const roomId = req.params.roomId
+        const data = await RoomService.closeRoom(adminId, roomId)
+        success(res, 200, {data})
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function openRoom(req, res, next) {
+    try {
+        const adminId = req.admin.id
+        const roomId = req.params.roomId
+        const data = await RoomService.openRoom(adminId, roomId)
+        success(res, 200, {data})
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     createRoom,
     getRoomInfo,
     getRoomList,
-    updateRoom
+    updateRoom,
+    deleteRoom,
+    closeRoom,
+    openRoom
 }
