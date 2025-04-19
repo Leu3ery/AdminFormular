@@ -34,6 +34,10 @@ async function deleteGameOnLocation(locationId, gameId, adminId) {
     const admin = await utils.findAdmin(adminId)
 
     if ((location.hasGame(game) && location.hasAdmin(admin)) || admin.isSuperAdmin) {
+        const iconPath = path.join(__dirname, '../public/', game.icon)
+        if (game.icon && fs.existsSync(iconPath)) {
+            fs.unlinkSync(iconPath)
+        }
         await game.destroy()
     } else {
         createError(400, "you has no premmision or this game dont belongs this locaion")

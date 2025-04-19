@@ -81,6 +81,14 @@ async function openRoom(req, res, next) {
     }
 }
 
+async function isRoomExist(req, res, next) {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
     createRoom,
     getRoomInfo,
@@ -88,5 +96,6 @@ module.exports = {
     updateRoom,
     deleteRoom,
     closeRoom,
-    openRoom
+    openRoom,
+    isRoomExist
 }
