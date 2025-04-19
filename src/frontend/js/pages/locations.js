@@ -174,7 +174,7 @@
            await api.post("/location", payload);
            showToast("Location created", "success");
          } else {
-           await api.put(`/location/${id}`, payload);
+           await api.patch(`/location/${id}`, payload);
            showToast("Location updated", "success");
          }
          await loadLocations();

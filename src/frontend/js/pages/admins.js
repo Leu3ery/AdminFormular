@@ -1,6 +1,7 @@
 /* js/pages/admins.js
    ────────────────────────────────────────────────────────────
    CRUD‑інтерфейс «Admins» (доступний тільки superAdmin‑ам)
+   Додано можливість оновлення пароля
    Ендпоїнти:
      GET    /admin/list
      POST   /admin/register
@@ -61,11 +62,11 @@
                    <input type="text" name="lastName" class="form-control" minlength="3" maxlength="64">
                  </div>
                  <div class="mb-3 password-field">
-                   <label class="form-label">Password *</label>
-                   <input type="password" name="password" class="form-control" minlength="3" maxlength="64" required>
+                   <label class="form-label">Password <span id="pwHelp" class="form-text text-muted"></span></label>
+                   <input type="password" name="password" class="form-control">
                  </div>
                  <div class="form-text">
-                   Super‑admins cannot be created from UI.
+                   Super‑admins cannot create other super‑admins.
                  </div>
                </div>
                <div class="modal-footer">
@@ -78,13 +79,14 @@
        </div>
      `;
    
-     const tbody     = container.querySelector("tbody");
-     const addBtn    = container.querySelector("#addBtn");
-     const modalEl   = container.querySelector("#adminModal");
-     const modal     = new bootstrap.Modal(modalEl);
-     const form      = modalEl.querySelector("#adminForm");
-     const modalTitle= modalEl.querySelector(".modal-title");
-     const passwordField = modalEl.querySelector(".password-field");
+     const tbody        = container.querySelector("tbody");
+     const addBtn       = container.querySelector("#addBtn");
+     const modalEl      = container.querySelector("#adminModal");
+     const modal        = new bootstrap.Modal(modalEl);
+     const form         = modalEl.querySelector("#adminForm");
+     const modalTitle   = modalEl.querySelector(".modal-title");
+     const passwordField= modalEl.querySelector(".password-field");
+     const pwHelp       = modalEl.querySelector("#pwHelp");
    
      /* ─────────────  state  ───────────── */
      let admins = [];
@@ -125,7 +127,10 @@
        modalTitle.textContent = "Create admin";
        form.reset();
        form.id.value = "";
+       // password required on create
        passwordField.classList.remove("d-none");
+       form.password.required = true;
+       pwHelp.textContent = "";
        modal.show();
      }
    
@@ -135,19 +140,21 @@
        form.username.value  = admin.username;
        form.firstName.value = admin.firstName ?? "";
        form.lastName.value  = admin.lastName ?? "";
-       form.password.value  = "";                   // blank → ignore
-       passwordField.classList.add("d-none");       // hide password on edit
+       // password optional on edit
+       passwordField.classList.remove("d-none");
+       form.password.required = false;
+       pwHelp.textContent = "(leave blank to keep current)";
+       form.password.value = "";
        modal.show();
      }
    
      /* ─────────────  event listeners  ───────────── */
      addBtn.addEventListener("click", openCreate);
    
-     /* table delegation */
      tbody.addEventListener("click", (e) => {
-       const tr   = e.target.closest("tr");
-       const id   = Number(tr?.dataset.id);
-       const admin= admins.find((a) => a.id === id);
+       const tr    = e.target.closest("tr");
+       const id    = Number(tr?.dataset.id);
+       const admin = admins.find((a) => a.id === id);
        if (!admin) return;
    
        if (e.target.classList.contains("editBtn")) {
@@ -157,27 +164,28 @@
        }
      });
    
-     /* create / update submit */
      form.addEventListener("submit", async (e) => {
        e.preventDefault();
        const fd = new FormData(form);
+       const id      = fd.get("id");
        const payload = {
          username:  fd.get("username").trim(),
          firstName: fd.get("firstName").trim() || undefined,
          lastName:  fd.get("lastName").trim() || undefined
        };
    
-       const id = fd.get("id");
-       const isNew = !id;
-   
-       if (isNew) payload.password = fd.get("password");
+       // include password if provided
+       const pw = fd.get("password");
+       if (pw && pw.trim()) payload.password = pw.trim();
    
        try {
-         if (isNew) {
+         if (!id) {
+           // create
            await api.post("/admin/register", payload);
            showToast("Admin created", "success");
          } else {
-           await api.put(`/admin/${id}`, payload);
+           // update
+           await api.patch(`/admin/${id}`, payload);
            showToast("Admin updated", "success");
          }
          await loadAdmins();
@@ -187,7 +195,6 @@
        }
      });
    
-     /* deletion */
      async function deleteAdmin(admin) {
        if (!confirm(`Delete admin "${admin.username}"?`)) return;
        try {
@@ -205,7 +212,7 @@
      /* ─────────────  cleanup on page‑switch  ───────────── */
      const listeners = [addBtn, tbody, form];
      return () => {
-       listeners.forEach((el) => el.replaceWith(el.cloneNode(true))); // brute detach
+       listeners.forEach((el) => el.replaceWith(el.cloneNode(true)));
        modal.dispose();
      };
    }

@@ -20,9 +20,6 @@ module.exports = (sequelize, DataTypes) => {
             photo: {
                 type: DataTypes.STRING
             }
-        },
-        {
-            timestamps: false
         }
     )
     return Clients

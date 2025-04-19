@@ -238,7 +238,7 @@
            await api.upload(`/location/${currentLid}/game`, fd);
            showToast("Game created", "success");
          } else {
-           await api.upload(`/location/${currentLid}/game/${id}`, fd, "PUT");
+           await api.upload(`/location/${currentLid}/game/${id}`, fd, "PATCH");
            showToast("Game updated", "success");
          }
          await loadGames();
