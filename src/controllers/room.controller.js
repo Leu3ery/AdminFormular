@@ -81,9 +81,11 @@ async function openRoom(req, res, next) {
     }
 }
 
-async function isRoomExist(req, res, next) {
+async function isRoomOpen(req, res, next) {
     try {
-        
+        const code = req.params.code
+        const data = await RoomService.isRoomOpen(code)
+        success(res, 200, {isRoomOpen:data ? true : false})
     } catch (error) {
         
     }
@@ -97,5 +99,5 @@ module.exports = {
     deleteRoom,
     closeRoom,
     openRoom,
-    isRoomExist
+    isRoomOpen
 }

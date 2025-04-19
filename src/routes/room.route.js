@@ -6,7 +6,7 @@ const RoomController = require('../controllers/room.controller')
 
 router.post('/', JWTAdminMiddleware, RoomController.createRoom)
 router.get('/', JWTAdminMiddleware, RoomController.getRoomList)  //limit + offset + isActivate + locationId + adminId
-router.get('/code/:code', RoomController.isRoomExist)
+router.get('/code/:code', RoomController.isRoomOpen)
 router.get('/:roomId', JWTAdminMiddleware, RoomController.getRoomInfo)
 router.patch('/:roomId', JWTAdminMiddleware, RoomController.updateRoom) // locatoinId gameId gameTime
 router.delete('/:roomId', JWTAdminMiddleware, RoomController.deleteRoom)

@@ -157,7 +157,7 @@ paths:
   /admin/{adminId}:
     get:
       summary:
-        "to get info by adminId if you are admin"
+        "to get info by adminId if you are superadmin"
       parameters:
         - in: path
           name: adminId
@@ -981,6 +981,26 @@ paths:
                     "LocationId": 2
                   }
                 }
+  /room/code/{code}:
+    get:
+      summary: "checks if room is open"
+      parameters:
+        - in: path
+          name: code
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "isRoomExist"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "isRoomOpen": true
+                }
+
 
 components:
   securitySchemes:

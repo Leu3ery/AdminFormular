@@ -133,6 +133,16 @@ async function openRoom(adminId, roomId) {
     return room
 }
 
+async function isRoomOpen(code) {
+    const room = await Rooms.findOne({
+        where: {
+            isActivate: true,
+            code
+        }
+    })
+    return room
+}
+
 module.exports = {
     createRoom,
     getRoomInfo,
@@ -140,5 +150,6 @@ module.exports = {
     updateRoom,
     deleteRoom,
     closeRoom,
-    openRoom
+    openRoom,
+    isRoomOpen
 }
