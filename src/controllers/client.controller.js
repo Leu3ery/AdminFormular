@@ -62,17 +62,21 @@ async function deleteClient(req, res, next) {
     }
 }
 
-// async function getClientsList(req, res, next) {
-//     try {
-        
-//     } catch (error) {
-//         next(error)
-//     }
-// }
+async function getClientsList(req, res, next) {
+    try {
+        const adminId = req.admin.id
+        const querys = utils.validationWrapper(ClientSchema.getClientsList, req.query)
+        const data = await ClientService.getClientsList(adminId, querys)
+        utils.success(res, 200, {data})
+    } catch (error) {
+        next(error)
+    }
+}
 
 module.exports = {
     createClient,
     getClientInfo,
     updateClient,
-    deleteClient
+    deleteClient,
+    getClientsList
 }

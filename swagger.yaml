@@ -222,8 +222,6 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - username
               properties: 
                 firstName:
                   type: string
@@ -718,6 +716,9 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required: 
+                - file
+                - data
               properties:
                 file:
                   type: string
@@ -1000,8 +1001,218 @@ paths:
                   "success": true,
                   "isRoomOpen": true
                 }
+  /client:
+    post:
+      summary: "create new client"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - data
+              properties:
+                file:
+                  type: string
+                  format: binary
+                data: 
+                  type: object
+                  required:
+                    - firstName
+                    - lastName
+                    - birthday
+                  properties:
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    birthday:
+                      type: string
+                      example: "2008-02-04T00:00:00.000Z"
+                    phone:
+                      type: string
+                      example: "+4368120229999"
+                    mail:
+                      type: string
+      responses:
+        "201":
+          description: "client was created"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 4,
+                    "firstName": "Noname",
+                    "lastName": "Noname",
+                    "birthday": "2000-02-03T23:00:00.000Z",
+                    "phone": "+4368120229999",
+                    "mail": "test@gmail.com",
+                    "photo": "1745174288585-63539522.gif",
+                    "updatedAt": "2025-04-20T18:38:08.601Z",
+                    "createdAt": "2025-04-20T18:38:08.601Z"
+                  }
+                }
+    get:
+      summary: "get list of clients if you are admin"
+      security: 
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: offset
+          schema: 
+            type: integer
+        - in: query
+          name: limit
+          schema: 
+            type: integer
+        - in: query
+          name: id
+          schema: 
+            type: integer
+        - in: query
+          name: phone
+          schema: 
+            type: string
+        - in: query
+          name: firstName
+          schema: 
+            type: string
+        - in: query
+          name: lastName
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: "client info"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 6,
+                      "firstName": "Valentyn",
+                      "lastName": "Hvozdenko",
+                      "birthday": "2008-02-04T00:00:00.000Z",
+                      "phone": "+4368120220467",
+                      "mail": "test@gmail.com",
+                      "photo": "1745223315862-687579432.jpeg",
+                      "password": "16Fz74FI",
+                      "createdAt": "2025-04-21T08:15:15.869Z",
+                      "updatedAt": "2025-04-21T08:15:15.869Z"
+                    }
+                  ]
+                }
 
+  /client/{clientId}: 
+    get:
+      summary: "get info about client by clientId | JWT OR password is required"
+      security: 
+        - {}
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: password
+          required: false
+          schema:
+            type: string
 
+      responses:
+        "200":
+          description: "client info"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 4,
+                    "firstName": "Noname",
+                    "lastName": "Noname",
+                    "birthday": "2000-02-03T23:00:00.000Z",
+                    "phone": "+4368120229999",
+                    "mail": "test@gmail.com",
+                    "photo": "1745174288585-63539522.gif",
+                    "updatedAt": "2025-04-20T18:38:08.601Z",
+                    "createdAt": "2025-04-20T18:38:08.601Z"
+                  }
+                }
+    patch:
+      summary: "to update client you need to be admin"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                data: 
+                  type: object
+                  properties:
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    birthday:
+                      type: string
+                      example: "2008-02-04T00:00:00.000Z"
+                    phone:
+                      type: string
+                      example: "+4368120229999"
+                    mail:
+                      type: string
+      responses:
+        "200":
+          description: "client was updated"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": {
+                    "id": 4,
+                    "firstName": "Noname",
+                    "lastName": "Noname",
+                    "birthday": "2000-02-03T23:00:00.000Z",
+                    "phone": "+4368120229999",
+                    "mail": "test@gmail.com",
+                    "photo": "1745174288585-63539522.gif",
+                    "updatedAt": "2025-04-20T18:38:08.601Z",
+                    "createdAt": "2025-04-20T18:38:08.601Z"
+                  }
+                }
+    delete:
+      summary: "to delete client you need to be admin"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "client was deleted"
 components:
   securitySchemes:
     bearerAuth:

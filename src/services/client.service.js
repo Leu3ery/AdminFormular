@@ -1,4 +1,5 @@
 const {Clients} = require('../models')
+const { Op } = require("sequelize");
 const utils = require('./utils')
 const fs = require('fs')
 const path = require('path')
@@ -56,9 +57,30 @@ async function deleteClient(adminid, clientId) {
     await client.destroy()
 }
 
+async function getClientsList(adminId, query) {
+    const admin = await utils.findAdmin(adminId)
+    
+    const request = {
+        where: {}
+    }
+
+    if (query.limit) request.limit = query.limit
+    if (query.offset) request.offset = query.offset
+    if (query.id) request.where.id = query.id
+    if (query.phone) request.where.phone = {[Op.startsWith]:query.phone}
+    if (query.firstName) request.where.firstName = {[Op.startsWith]:query.firstName}
+    if (query.lastName) request.where.lastName = {[Op.startsWith]:query.lastName}
+
+    console.log(request)
+
+    const clients = Clients.findAll(request)
+    return clients
+}
+
 module.exports = {
     createClient,
     getClientInfo,
     updateClient,
-    deleteClient
+    deleteClient,
+    getClientsList
 }
