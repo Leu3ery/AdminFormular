@@ -51,8 +51,10 @@ async function deleteClient(adminid, clientId) {
     const admin = await utils.findAdmin(adminid)
     const client = await utils.findClient(clientId)
 
-    const photoPath = path.join(__dirname, "../public/", client.photo)
-    if (fs.existsSync(photoPath)) fs.unlinkSync(photoPath)
+    if (client.photo) {
+        const photoPath = path.join(__dirname, "../public/", client.photo)
+        if (fs.existsSync(photoPath)) fs.unlinkSync(photoPath)
+    }
 
     await client.destroy()
 }
