@@ -12,7 +12,7 @@ servers:
     description: Dev local serverk
 
 paths:
-  /admin:
+  /admins/me:
     get:
       summary:
         "to get info by JWT"
@@ -41,7 +41,7 @@ paths:
                         type: string
                       isSuperAdmin:
                         type: boolean
-  /admin/list:
+  /admins:
     get:
       summary:
         "to get list of admins if you superadmin"
@@ -74,7 +74,7 @@ paths:
                           type: string
                         isSuperAdmin:
                           type: boolean
-  /admin/register:
+  /admins/register:
     post: 
       summary:
         "to create an admin you need to be superAdmin"
@@ -124,7 +124,7 @@ paths:
                     "isSuperAdmin": false
                   }
                 }
-  /admin/login:
+  /admins/login:
     post:
       requestBody: 
         required: true
@@ -154,7 +154,7 @@ paths:
                 properties:
                   token: 
                     type: string
-  /admin/{adminId}:
+  /admins/{adminId}:
     get:
       summary:
         "to get info by adminId if you are superadmin"
@@ -255,7 +255,7 @@ paths:
                     "isSuperAdmin": false
                   }
                 }
-  /admin/location:
+  /admins/locations:
     get:
       summary:
         "get list of my locations"
@@ -287,7 +287,7 @@ paths:
                     }
                   ]
                 }
-  /admin/{adminId}/location:
+  /admins/{adminId}/locations:
     get:
       summary:
         "to get list of locations you need to be superadminadmin"
@@ -325,7 +325,7 @@ paths:
                     }
                   ]
                 }
-  /admin/{adminId}/location/{locationId}:
+  /admins/{adminId}/locations/{locationId}:
     post:
       summary:
           "to connect admin with location you need to be superAdmin"
@@ -366,7 +366,7 @@ paths:
         "200":
           description: 
             "association was deleted"
-  /location:
+  /locations:
     post:
       summary:
         "to create location you need to be superadmin" 
@@ -415,7 +415,6 @@ paths:
                     "createdAt": "2025-04-16T10:22:14.845Z"
                   }
                 }
-  /location/list:
     get:
       summary:
         "list of locations"
@@ -450,7 +449,7 @@ paths:
                           type: string
                         createdAd:
                           type: string  
-  /location/{locationId}:
+  /locations/{locationId}:
     get:
       summary:
         "info by locationId"
@@ -552,7 +551,7 @@ paths:
         "200":
           description:
             "location was deleted"
-  /location/{locationId}/game:
+  /locations/{locationId}/games:
     post:
       summary:
         "create game on location if you are admin"
@@ -636,7 +635,7 @@ paths:
                     }
                   ]
                 }
-  /location/{locationId}/game/{gameId}:
+  /locations/{locationId}/games/{gameId}:
     get:
       summary:
         "get game on location"
@@ -750,7 +749,7 @@ paths:
                     "LocationId": 1
                   }
                 }
-  /room:
+  /rooms:
     post:
       summary: "create new room"
       security:
@@ -835,7 +834,7 @@ paths:
                     }
                   ]
                 }
-  /room/{roomId}:
+  /rooms/{roomId}:
     get:
       summary: "get info about room if you are admin"
       security:
@@ -919,7 +918,7 @@ paths:
       responses:
         "200":
           description: "Room deleted"
-  /room/{roomId}/open:
+  /rooms/{roomId}/open:
     patch:
       summary: "open room if you are admin"
       security:
@@ -951,7 +950,7 @@ paths:
                   }
                 }
 
-  /room/{roomId}/close:
+  /rooms/{roomId}/close:
     patch:
       summary: "close room if you are admin"
       security:
@@ -982,7 +981,7 @@ paths:
                     "LocationId": 2
                   }
                 }
-  /room/code/{code}:
+  /rooms/code/{code}:
     get:
       summary: "checks if room is open"
       parameters:
@@ -1001,7 +1000,7 @@ paths:
                   "success": true,
                   "isRoomOpen": true
                 }
-  /client:
+  /clients:
     post:
       summary: "create new client"
       parameters:
@@ -1115,7 +1114,7 @@ paths:
                   ]
                 }
 
-  /client/{clientId}: 
+  /clients/{clientId}: 
     get:
       summary: "get info about client by clientId | JWT OR password is required"
       security: 

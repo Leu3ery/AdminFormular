@@ -13,5 +13,6 @@ router.delete('/:roomId', JWTAdminMiddleware, RoomController.deleteRoom)
 router.patch('/:roomId/open', JWTAdminMiddleware, RoomController.openRoom)
 router.patch('/:roomId/close', JWTAdminMiddleware, RoomController.closeRoom)
 
+// router.post('/:roomId/client')
 
 module.exports = router

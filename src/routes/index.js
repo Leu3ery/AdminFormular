@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-router.use('/admin', require('./admin.route'))
-router.use('/location', require('./location.route'))
-router.use('/room', require('./room.route'))
-router.use('/client', require('./client.route'))
+router.use('/admins', require('./admin.route'))
+router.use('/locations', require('./location.route'))
+router.use('/rooms', require('./room.route'))
+router.use('/clients', require('./client.route'))
 
 module.exports = router
