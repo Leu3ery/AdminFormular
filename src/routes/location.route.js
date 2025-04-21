@@ -4,6 +4,7 @@ const router = express.Router()
 const upload = require('../multer/multer');
 
 const LocationController = require('../controllers/location.controller')
+const GameController = require('../controllers/game.controller')
 const RoomController = require('../controllers/room.controller')
 const JWTAdminMiddleware = require('../middlewares/JWTAdminMiddleware')
 
@@ -15,10 +16,10 @@ router.delete('/:locationId', JWTAdminMiddleware, LocationController.deleteLocat
 
 router.get('/:locationId/rooms', JWTAdminMiddleware, RoomController.getRoomList) //limit + offset + isActivate + locationId + adminId
 
-router.post('/:locationId/games', JWTAdminMiddleware, upload.single('file'), LocationController.createGameOnLocation)
-router.get('/:locationId/games', LocationController.getGameListOnLocation)
-router.get('/:locationId/games/:gameId', LocationController.getGameInfoOnLocation)
-router.patch('/:locationId/games/:gameId', JWTAdminMiddleware, upload.single('file'), LocationController.updateGameOnLocation)
-router.delete('/:locationId/games/:gameId', JWTAdminMiddleware, LocationController.deleteGameOnLocation)
+router.post('/:locationId/games', JWTAdminMiddleware, upload.single('file'), GameController.createGameOnLocation)
+router.get('/:locationId/games', GameController.getGameListOnLocation)
+router.get('/:locationId/games/:gameId', GameController.getGameInfoOnLocation)
+router.patch('/:locationId/games/:gameId', JWTAdminMiddleware, upload.single('file'), GameController.updateGameOnLocation)
+router.delete('/:locationId/games/:gameId', JWTAdminMiddleware, GameController.deleteGameOnLocation)
 
 module.exports = router
