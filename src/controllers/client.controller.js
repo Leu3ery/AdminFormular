@@ -23,8 +23,10 @@ async function createClient(req, res, next) {
 
 async function getClientInfo(req, res, next) {
     try {
+        const adminId = req.adminId
+        const password = req.password
         const clientId = req.params.clientId
-        const data = await ClientService.getClientInfo(clientId)
+        const data = await ClientService.getClientInfo(adminId, password, clientId)
         utils.success(res, 200, {data})
     } catch (error) {
         next(error)
@@ -49,8 +51,28 @@ async function updateClient(req, res, next) {
     }
 }
 
+async function deleteClient(req, res, next) {
+    try {
+        const clientId = req.params.clientId
+        const adminid = req.admin.id
+        await ClientService.deleteClient(adminid, clientId)
+        utils.success(res, 200)
+    } catch (error) {
+        next(error)
+    }
+}
+
+// async function getClientsList(req, res, next) {
+//     try {
+        
+//     } catch (error) {
+//         next(error)
+//     }
+// }
+
 module.exports = {
     createClient,
     getClientInfo,
-    updateClient
+    updateClient,
+    deleteClient
 }

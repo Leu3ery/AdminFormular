@@ -1,5 +1,4 @@
 const Joi = require('joi')
-const { get } = require('../app')
 
 const createRoomSchema = Joi.object({
     LocationId: Joi.number().required(),
