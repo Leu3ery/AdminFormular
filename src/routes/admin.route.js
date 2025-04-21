@@ -8,7 +8,7 @@ router.get('/me', JWTAdminMiddleware, AdminController.getAdminInfo) // / -> /me
 router.post('/register', JWTAdminMiddleware, AdminController.createAdmin)
 router.post('/login', AdminController.getAdminJWT)
 router.get('/', JWTAdminMiddleware, AdminController.getAdminList) // /list -> /
-router.get('/locations', JWTAdminMiddleware, AdminController.getMyLocations)//s
+router.get('/me/locations', JWTAdminMiddleware, AdminController.getMyLocations)//s
 router.get('/:adminId', JWTAdminMiddleware, AdminController.getAdminInfoById)
 router.patch('/:adminId', JWTAdminMiddleware, AdminController.updateAdmin)
 router.delete('/:adminId', JWTAdminMiddleware, AdminController.deleteAdmin)

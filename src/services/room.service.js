@@ -38,18 +38,24 @@ async function getRoomInfo(adminId, roomId) {
     return room
 }
 
-async function getRoomList(adminId, query) {
-    //limit + offset + isActivate + locationId + adminId
+async function getRoomList(adminId, locationId, query) {
+    //limit + offset + isActivate + adminId
     const admin = await utils.findAdmin(adminId)
+    const location = await utils.findLocation(locationId)
+
+    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
+        throw new createError(400, "Location has no this admin")
+    }
 
     const request = {
-        where: {}
+        where: {
+            LocationId:locationId
+        }
     }
 
     if (query.limit) request.limit = query.limit
     if (query.offset) request.offset = query.offset
     if (query.isActivate != undefined) request.where.isActivate = query.isActivate
-    if (query.locationId) request.where.LocationId = query.locationId
     if (query.adminId) request.where.AdminId = query.adminId
 
     const room = await Rooms.findAll(request)

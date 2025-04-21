@@ -6,11 +6,10 @@ const createRoomSchema = Joi.object({
 })
 
 const getRoomList = Joi.object({
-    //limit + offset + isActivate + locationId + adminId
+    //limit + offset + isActivate + adminId
     limit: Joi.number().integer().min(1),
     offset: Joi.number().integer().min(0),
     isActivate: Joi.boolean(),
-    locationId: Joi.number().integer(),
     adminId: Joi.number().integer(),
 })
 

@@ -27,9 +27,10 @@ async function getRoomInfo(req, res, next) {
 async function getRoomList(req, res, next) {
     try {
         //limit + offset + isActivate + locationId + adminId
+        const locationId = req.params.locationId
         const adminId = req.admin.id
         const query = validationWrapper(RoomValidation.getRoomList, req.query)
-        const data = await RoomService.getRoomList(adminId, query)
+        const data = await RoomService.getRoomList(adminId, locationId, query)
         success(res, 200, {data})
     } catch (error) {
         next(error)

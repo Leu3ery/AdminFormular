@@ -255,7 +255,7 @@ paths:
                     "isSuperAdmin": false
                   }
                 }
-  /admins/locations:
+  /admins/me/locations:
     get:
       summary:
         "get list of my locations"
