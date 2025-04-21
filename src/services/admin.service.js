@@ -49,7 +49,7 @@ async function getAdminInfoById(currentAdminId, adminId) {
     }
 
     const data = await Admins.findOne({
-        attributes: ['firstName', 'lastName', 'username', 'isSuperAdmin'],
+        attributes: ['id', 'firstName', 'lastName', 'username', 'isSuperAdmin'],
         where: {
             id: adminId
         }
@@ -104,9 +104,9 @@ async function connectLocationWithAdmin(adminId, locationId, superadminId) {
     })
 }
 
-async function getAdminLocations(adminId, locationsFromAdminId) {
-    const superadmin = await utils.isSuperAdmin(adminId)
-    const admin = await utils.findAdmin(locationsFromAdminId)
+async function getAdminLocations(superadminId, targetAdminId) {
+    const superadmin = await utils.isSuperAdmin(superadminId)
+    const admin = await utils.findAdmin(targetAdminId)
 
     return await admin.getLocations()
 }
@@ -124,8 +124,8 @@ async function deleteAdminLocation(adminId, locationId, superadminId) {
 
     const association = await AdminsLocations.findOne({
         where: {
-            adminId,
-            locationId
+            AdminId: adminId,
+            LocationId: locationId
         }
     })
 
