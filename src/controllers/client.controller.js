@@ -5,6 +5,7 @@ const utils = require('./utils')
 async function createClient(req, res, next) {
     try {
         const inputData = JSON.parse(req.body.data)
+        const code = req.query.code
 
         if (!req.file) {
             return res.status(400).json({
@@ -14,7 +15,7 @@ async function createClient(req, res, next) {
         }
         inputData.photo = req.file.filename
         const value = utils.validationWrapper(ClientSchema.createClient, inputData)
-        const data = await ClientService.createClient(value)
+        const data = await ClientService.createClient(value, code)
         utils.success(res, 201, {data})
     } catch (error) {
         next(error)

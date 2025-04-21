@@ -1004,6 +1004,12 @@ paths:
   /client:
     post:
       summary: "create new client"
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: integer
       requestBody:
         content:
           multipart/form-data:
@@ -1022,6 +1028,7 @@ paths:
                     - firstName
                     - lastName
                     - birthday
+                    - phone
                   properties:
                     firstName:
                       type: string

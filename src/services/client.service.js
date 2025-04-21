@@ -1,11 +1,21 @@
-const {Clients} = require('../models')
+const {Clients, Rooms} = require('../models')
 const { Op } = require("sequelize");
 const utils = require('./utils')
 const fs = require('fs')
 const path = require('path')
 const createError = require('http-errors')
 
-async function createClient(value) {
+async function createClient(value, code) {
+    const room = await Rooms.findOne({
+        where: {
+            code: code
+        }
+    })
+
+    if (!room) {
+        throw createError(404, "Room  was not found")
+    }
+
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     let password = ""
     for (i=0;i<8;i++) {
