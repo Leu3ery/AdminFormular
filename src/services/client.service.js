@@ -18,7 +18,7 @@ async function createClient(value, code) {
 
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     let password = ""
-    for (i=0;i<8;i++) {
+    for (let i=0;i<8;i++) {
         password += chars[utils.getRandomInt(0, chars.length)]
     }
     value.password = password
@@ -30,13 +30,13 @@ async function getClientInfo(adminId, password, clientId) {
     if (adminId) {
         const admin = await utils.findAdmin(adminId)
     } else {
-        const client = await Clients.findOne({
+        const clientExist = await Clients.findOne({
             where: {
                 id: clientId,
                 password: password
             }
         })
-        if (!client) {
+        if (!clientExist) {
             throw createError(404, "Username of password are false")
         }
     }
@@ -83,9 +83,7 @@ async function getClientsList(adminId, query) {
     if (query.firstName) request.where.firstName = {[Op.startsWith]:query.firstName}
     if (query.lastName) request.where.lastName = {[Op.startsWith]:query.lastName}
 
-    console.log(request)
-
-    const clients = Clients.findAll(request)
+    const clients = await Clients.findAll(request)
     return clients
 }
 

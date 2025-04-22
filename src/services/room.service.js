@@ -8,12 +8,11 @@ async function createRoom(AdminId, data) {
     const game = await utils.findGame(GameId)
     const admin = await utils.findAdmin(AdminId)
 
-    const isAdminOfLocation = await location.hasAdmin(admin);
-    const isSuper = admin.isSuperAdmin;
+    await utils.checkRoomAccess(admin, location)
+    
     const ownsGame = await location.hasGame(game);
-
-    if ((!isAdminOfLocation && !isSuper) || !ownsGame) {
-    throw createError(403, "You have no permission or this game doesn’t belong to this location");
+    if (!ownsGame) {
+        throw createError(403, "This game doesn’t belong to this location");
     }
 
     let code = utils.getRandomInt(1000, 10000)
@@ -41,12 +40,7 @@ async function getRoomInfo(adminId, roomId) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-    const isAdminOfLocation = await location.hasAdmin(admin);
-    const isSuper = admin.isSuperAdmin;
-
-    if (!isAdminOfLocation && !isSuper) {
-        throw createError(403, "You have no permission or this game doesn’t belong to this location");
-    }
+    await utils.checkRoomAccess(admin, location)
 
     return room
 }
@@ -56,11 +50,7 @@ async function getRoomList(adminId, locationId, query) {
     const admin = await utils.findAdmin(adminId)
     const location = await utils.findLocation(locationId)
 
-    const isAdminOfLocation = await location.hasAdmin(admin);
-    const isSuper = admin.isSuperAdmin;
-    if (!isAdminOfLocation && !isSuper) {
-        throw createError(403, "You have no permission");
-    }
+    await utils.checkRoomAccess(admin, location)
 
     const request = {
         where: {
@@ -82,12 +72,7 @@ async function updateRoom(adminId, roomId, value) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-
-    const isAdminOfLocation = await location.hasAdmin(admin);
-    const isSuper = admin.isSuperAdmin;
-    if (!isAdminOfLocation && !isSuper) {
-        throw createError(403, "You have no permission");
-    }
+    await utils.checkRoomAccess(admin, location)
 
     const updateData = {}
     if (value.gameId) {
@@ -109,11 +94,7 @@ async function deleteRoom(adminId, roomId) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-    const isAdminOfLocation = await location.hasAdmin(admin);
-    const isSuper = admin.isSuperAdmin;
-    if (!isAdminOfLocation && !isSuper) {
-        throw createError(403, "You have no permission");
-    }
+    await utils.checkRoomAccess(admin, location)
 
     await room.destroy()
 }
@@ -123,11 +104,7 @@ async function closeRoom(adminId, roomId) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-    const isAdminOfLocation = await location.hasAdmin(admin);
-    const isSuper = admin.isSuperAdmin;
-    if (!isAdminOfLocation && !isSuper) {
-        throw createError(403, "You have no permission");
-    }
+    await utils.checkRoomAccess(admin, location)
 
     room.isActivate = false
     room.code = null
@@ -140,11 +117,7 @@ async function openRoom(adminId, roomId) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-    const isAdminOfLocation = await location.hasAdmin(admin);
-    const isSuper = admin.isSuperAdmin;
-    if (!isAdminOfLocation && !isSuper) {
-        throw createError(403, "You have no permission");
-    }
+    await utils.checkRoomAccess(admin, location)
 
     let code = utils.getRandomInt(1000, 10000)
     while(await Rooms.findOne({

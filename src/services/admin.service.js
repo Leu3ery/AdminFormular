@@ -45,7 +45,7 @@ async function getAdminInfo(adminId) {
 async function getAdminInfoById(currentAdminId, adminId) {
     const currentAdmin = await Admins.findByPk(currentAdminId)
     if (!currentAdmin) {
-        throw new createError(404, "Admin not found")
+        throw createError(404, "Admin not found")
     }
 
     const data = await Admins.findOne({
@@ -55,7 +55,7 @@ async function getAdminInfoById(currentAdminId, adminId) {
         }
     })
     if (!data) {
-        throw new createError(404, "Admin not found")
+        throw createError(404, "Admin not found")
     }
     return data
 }
@@ -87,7 +87,7 @@ async function deleteAdmin(superadminId, adminId) {
     const admin = await utils.findAdmin(adminId)
 
     if (admin.username == superadmin.username) {
-        throw new createError(400, "You cant delete yourself")
+        throw createError(400, "You cant delete yourself")
     }
 
     await admin.destroy()
@@ -130,7 +130,7 @@ async function deleteAdminLocation(adminId, locationId, superadminId) {
     })
 
     if (!association) {
-        throw new createError(404, "There is not such association")
+        throw createError(404, "There is not such association")
     }
 
     await association.destroy()

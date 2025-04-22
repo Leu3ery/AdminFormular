@@ -61,6 +61,14 @@ async function findClient(clientId) {
     }
 }
 
+async function checkRoomAccess(admin, location) {
+    const isAdmin = await location.hasAdmin(admin)
+    if (!isAdmin && !admin.isSuperAdmin) {
+      throw createError(403, "Forbidden")
+    }
+  }
+  
+
 function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
@@ -74,5 +82,6 @@ module.exports = {
     findGame,
     findRoom,
     findClient,
-    getRandomInt
+    getRandomInt,
+    checkRoomAccess
 }
