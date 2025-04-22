@@ -1,5 +1,6 @@
 const GameService = require('../services/game.service')
 const GameSchema = require('../validation/game.validation')
+const fs = require('fs')
 
 // {
 //     fieldname: 'file',
@@ -42,11 +43,16 @@ async function createGameOnLocation(req, res, next) {
 
         const data = await GameService.createGame(value, locationId, adminId)
 
-        return res.status(200).json({
+        return res.status(201).json({
             success: true,
             data: data
         })
     } catch (error) {
+        if (req.file && req.file.path) {
+            fs.unlink(req.file.path, unlinkErr => {
+              if (unlinkErr) console.error("Failed to delete file:", unlinkErr);
+            });
+        }
         next(error)
     }
 }
@@ -120,6 +126,11 @@ async function updateGameOnLocation(req, res, next) {
             data: newObject
         })
     } catch (error) {
+        if (req.file && req.file.path) {
+            fs.unlink(req.file.path, unlinkErr => {
+              if (unlinkErr) console.error("Failed to delete file:", unlinkErr);
+            });
+        }
         next(error)
     }
 }

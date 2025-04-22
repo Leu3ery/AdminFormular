@@ -5,7 +5,10 @@ function validationWrapper(schema, data) {
 
     if (error) {
         console.log(error)
-        throw new createError(400, error.details.reduce((m1, m2) => m1.message + " " + m2.message))
+        const msg = error.details
+            .map(d => d.message)
+            .join("; ");
+        throw createError(400, msg);
     }
 
     return value

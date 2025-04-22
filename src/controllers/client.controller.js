@@ -30,7 +30,7 @@ async function createClient(req, res, next) {
 
 async function getClientInfo(req, res, next) {
     try {
-        const adminId = req.adminId
+        const adminId = req.admin.id
         const password = req.password
         const clientId = req.params.clientId
         const data = await ClientService.getClientInfo(adminId, password, clientId)

@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
             throw new Error("JWT of password is required")
         }
 
-        req.adminId = adminId
+        req.admin = {id:adminId}
         req.password = password
         next()
     } catch (error) {
