@@ -5,15 +5,19 @@ const fs = require('fs')
 const path = require('path')
 const createError = require('http-errors')
 
-async function createClient(value, code) {
-    const room = await Rooms.findOne({
-        where: {
-            code: code
+async function createClient(value, code, adminId) {
+    if (adminId) {
+        const admin = await utils.findAdmin(adminId)
+    } else {
+        const room = await Rooms.findOne({
+            where: {
+                code: code
+            }
+        })
+    
+        if (!room) {
+            throw createError(404, "Room  was not found")
         }
-    })
-
-    if (!room) {
-        throw createError(404, "Room  was not found")
     }
 
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"

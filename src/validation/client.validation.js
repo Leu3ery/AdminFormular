@@ -6,7 +6,7 @@ const createClient = Joi.object({
     mail: Joi.string().trim().email().min(3).max(255).optional(),
     phone: Joi.string().trim().pattern(/^\+\d{8,15}$/, "Austrian phone").required(),
     birthday: Joi.string().trim().isoDate().required(),
-    photo: Joi.string().trim().required()
+    photo: Joi.string().trim()
 })
 
 const updateClient = Joi.object({

@@ -6,17 +6,16 @@ const fs = require('fs')
 async function createClient(req, res, next) {
     try {
         const inputData = JSON.parse(req.body.data)
-        const code = req.query.code
 
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: "file is required"
-            })
+        if (req.file) {
+            inputData.photo = req.file.filename
         }
-        inputData.photo = req.file.filename
+
+        const code = req.code
+        const adminId = req.admin.id
+        
         const value = utils.validationWrapper(ClientSchema.createClient, inputData)
-        const data = await ClientService.createClient(value, code)
+        const data = await ClientService.createClient(value, code, adminId)
         utils.success(res, 201, {data})
     } catch (error) {
         if (req.file && req.file.path) {

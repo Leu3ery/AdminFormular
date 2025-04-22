@@ -1004,11 +1004,13 @@ paths:
                 }
   /clients:
     post:
-      summary: "create new client"
+      summary: "create new client (if you are admin of has code for room)"
+      security: 
+        - {}
+        - bearerAuth: []
       parameters:
         - in: query
           name: code
-          required: true
           schema:
             type: integer
       requestBody:
@@ -1017,7 +1019,6 @@ paths:
             schema:
               type: object
               required:
-                - file
                 - data
               properties:
                 file:
