@@ -8,8 +8,12 @@ async function createRoom(AdminId, data) {
     const game = await utils.findGame(GameId)
     const admin = await utils.findAdmin(AdminId)
 
-    if ((!location.hasAdmin(admin) && admin.isSuperAdmin) || !location.hasGame(game)) {
-        throw new createError(400, "Location has no this admin or game")
+    const isAdminOfLocation = await location.hasAdmin(admin);
+    const isSuper = admin.isSuperAdmin;
+    const ownsGame = await location.hasGame(game);
+
+    if ((!isAdminOfLocation && !isSuper) || !ownsGame) {
+    throw createError(403, "You have no permission or this game doesn’t belong to this location");
     }
 
     let code = utils.getRandomInt(1000, 10000)
@@ -35,6 +39,15 @@ async function createRoom(AdminId, data) {
 async function getRoomInfo(adminId, roomId) {
     const admin = await utils.findAdmin(adminId)
     const room = await utils.findRoom(roomId)
+    const location = await utils.findLocation(room.LocationId)
+
+    const isAdminOfLocation = await location.hasAdmin(admin);
+    const isSuper = admin.isSuperAdmin;
+
+    if (!isAdminOfLocation && !isSuper) {
+        throw createError(403, "You have no permission or this game doesn’t belong to this location");
+    }
+
     return room
 }
 
@@ -43,8 +56,10 @@ async function getRoomList(adminId, locationId, query) {
     const admin = await utils.findAdmin(adminId)
     const location = await utils.findLocation(locationId)
 
-    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
-        throw new createError(400, "Location has no this admin")
+    const isAdminOfLocation = await location.hasAdmin(admin);
+    const isSuper = admin.isSuperAdmin;
+    if (!isAdminOfLocation && !isSuper) {
+        throw createError(403, "You have no permission");
     }
 
     const request = {
@@ -68,15 +83,17 @@ async function updateRoom(adminId, roomId, value) {
     const location = await utils.findLocation(room.LocationId)
 
 
-    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
-        throw new createError(400, "Location has no this admin")
+    const isAdminOfLocation = await location.hasAdmin(admin);
+    const isSuper = admin.isSuperAdmin;
+    if (!isAdminOfLocation && !isSuper) {
+        throw createError(403, "You have no permission");
     }
 
     const updateData = {}
     if (value.gameId) {
         const game = await utils.findGame(value.gameId)
-        if (!location.hasGame(game)) {
-            throw new createError(400, "Location has no this game")
+        if (!await location.hasGame(game)) {
+            throw createError(400, "Location has no this game")
         }
         updateData.GameId = value.gameId
     }
@@ -92,8 +109,10 @@ async function deleteRoom(adminId, roomId) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
-        throw new createError(400, "Location has no this admin")
+    const isAdminOfLocation = await location.hasAdmin(admin);
+    const isSuper = admin.isSuperAdmin;
+    if (!isAdminOfLocation && !isSuper) {
+        throw createError(403, "You have no permission");
     }
 
     await room.destroy()
@@ -104,8 +123,10 @@ async function closeRoom(adminId, roomId) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
-        throw new createError(400, "Location has no this admin")
+    const isAdminOfLocation = await location.hasAdmin(admin);
+    const isSuper = admin.isSuperAdmin;
+    if (!isAdminOfLocation && !isSuper) {
+        throw createError(403, "You have no permission");
     }
 
     room.isActivate = false
@@ -119,8 +140,10 @@ async function openRoom(adminId, roomId) {
     const room = await utils.findRoom(roomId)
     const location = await utils.findLocation(room.LocationId)
 
-    if (!location.hasAdmin(admin) && admin.isSuperAdmin) {
-        throw new createError(400, "Location has no this admin")
+    const isAdminOfLocation = await location.hasAdmin(admin);
+    const isSuper = admin.isSuperAdmin;
+    if (!isAdminOfLocation && !isSuper) {
+        throw createError(403, "You have no permission");
     }
 
     let code = utils.getRandomInt(1000, 10000)

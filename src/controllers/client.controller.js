@@ -1,6 +1,7 @@
 const ClientSchema = require('../validation/client.validation')
 const ClientService = require('../services/client.service')
 const utils = require('./utils')
+const fs = require('fs')
 
 async function createClient(req, res, next) {
     try {
@@ -18,6 +19,11 @@ async function createClient(req, res, next) {
         const data = await ClientService.createClient(value, code)
         utils.success(res, 201, {data})
     } catch (error) {
+        if (req.file && req.file.path) {
+            fs.unlink(req.file.path, unlinkErr => {
+              if (unlinkErr) console.error("Failed to delete file:", unlinkErr);
+            });
+        }
         next(error)
     }
 }
@@ -48,6 +54,11 @@ async function updateClient(req, res, next) {
         const data = await ClientService.updateClient(adminid, clientId, value)
         utils.success(res, 200, {data})
     } catch (error) {
+        if (req.file && req.file.path) {
+            fs.unlink(req.file.path, unlinkErr => {
+              if (unlinkErr) console.error("Failed to delete file:", unlinkErr);
+            });
+        }
         next(error)
     }
 }

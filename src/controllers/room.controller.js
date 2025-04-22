@@ -88,7 +88,7 @@ async function isRoomOpen(req, res, next) {
         const data = await RoomService.isRoomOpen(code)
         success(res, 200, {isRoomOpen:data ? true : false})
     } catch (error) {
-        
+        next(error)
     }
 }
 

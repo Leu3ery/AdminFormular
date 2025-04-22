@@ -8,7 +8,7 @@ const getClientMiddleware = require('../middlewares/getClientMiddleware')
 router.post('/', upload.single('file'), ClientController.createClient)
 router.get('/', JWTAdminMiddleware, ClientController.getClientsList)
 router.get('/:clientId', getClientMiddleware, ClientController.getClientInfo)
-router.patch('/:clientId', upload.single('file'), JWTAdminMiddleware, ClientController.updateClient)
+router.patch('/:clientId', JWTAdminMiddleware, upload.single('file'), ClientController.updateClient)
 router.delete('/:clientId', JWTAdminMiddleware, ClientController.deleteClient)
 
 module.exports = router
