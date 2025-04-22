@@ -749,7 +749,7 @@ paths:
                     "LocationId": 1
                   }
                 }
-  /location/{locationId}/rooms:
+  /locations/{locationId}/rooms:
     get:
       summary: "to get list of rooms you need to be admin"
       security:
