@@ -11,7 +11,7 @@ async function createGame(value, locationId, adminId) {
     if (await admin.hasLocation(location) || admin.isSuperAdmin) {
         return await Games.create(value)
     } else {
-        throw new createError(400, "You have no premmision to do that")
+        throw  createError(400, "You have no premmision to do that")
     }
 }
 
@@ -25,6 +25,10 @@ async function getGameInfoOnLocation(locationId, gameId) {
     const location = await utils.findLocation(locationId)
     const game = await utils.findGame(gameId)
 
+    if (!(await location.hasGame(game))) {
+        throw createError(404, "Game not found on this location")
+    }
+
     return game
 }
 
@@ -33,14 +37,14 @@ async function deleteGameOnLocation(locationId, gameId, adminId) {
     const game = await utils.findGame(gameId)
     const admin = await utils.findAdmin(adminId)
 
-    if ((location.hasGame(game) && location.hasAdmin(admin)) || admin.isSuperAdmin) {
+    if ((await location.hasGame(game) && await location.hasAdmin(admin)) || admin.isSuperAdmin) {
         const iconPath = path.join(__dirname, '../public/', game.icon)
         if (game.icon && fs.existsSync(iconPath)) {
             fs.unlinkSync(iconPath)
         }
         await game.destroy()
     } else {
-        createError(400, "you has no premmision or this game dont belongs this locaion")
+        throw createError(400, "You have no permission or this game doesn’t belong to this location")
     }
 } 
 
@@ -49,7 +53,7 @@ async function updateGameOnLocation(locationId, gameId, adminId, value) {
     const game = await utils.findGame(gameId)
     const admin = await utils.findAdmin(adminId)
 
-    if ((location.hasGame(game) && location.hasAdmin(admin)) || admin.isSuperAdmin) {
+    if ((await location.hasGame(game) && await location.hasAdmin(admin)) || admin.isSuperAdmin) {
         const iconPath = path.join(__dirname, '../public/', game.icon)
         if (value.icon && fs.existsSync(iconPath)) {
             fs.unlinkSync(iconPath)
@@ -58,7 +62,7 @@ async function updateGameOnLocation(locationId, gameId, adminId, value) {
         await game.save()
         return game
     } else {
-        createError(400, "you has no premmision or this game dont belongs this locaion")
+        throw createError(400, "You have no permission or this game doesn’t belong to this location")
     }
 }
 

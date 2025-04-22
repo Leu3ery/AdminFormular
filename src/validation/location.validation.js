@@ -5,7 +5,7 @@ const createLocationSchema = Joi.object({
     city: Joi.string().trim().min(3).max(64).required(),
     postcode: Joi.string().trim().min(3).max(64).required(),
     phone: Joi.string().trim().min(3).max(64).required(),
-    mail: Joi.string().trim().min(3).max(64).required()
+    mail: Joi.string().email().required()
 })
 
 const updateLocationSchema = Joi.object({
@@ -13,7 +13,7 @@ const updateLocationSchema = Joi.object({
     city: Joi.string().trim().min(3).max(64),
     postcode: Joi.string().trim().min(3).max(64),
     phone: Joi.string().trim().min(3).max(64),
-    mail: Joi.string().trim().min(3).max(64)
+    mail: Joi.string().email()
 }).min(1)
 
 module.exports = {
