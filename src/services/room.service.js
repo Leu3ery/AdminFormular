@@ -142,6 +142,9 @@ async function isRoomOpen(code) {
             code
         }
     })
+    if (!room) {
+        throw createError(404, "Room no exist or not open")
+    }
     return room
 }
 

@@ -2,6 +2,7 @@ const ClientSchema = require('../validation/client.validation')
 const ClientService = require('../services/client.service')
 const utils = require('./utils')
 const fs = require('fs')
+const createError = require('http-errors')
 
 async function createClient(req, res, next) {
     try {
@@ -84,10 +85,33 @@ async function getClientsList(req, res, next) {
     }
 }
 
+async function connectClientWithRoom(req, res, next) {
+    try {
+        if (!req.file) {
+            throw createError(400, "You need to upload file")
+        }
+        const filename = req.file.filename
+        const adminId = req.admin.id
+        const password = req.password
+        const roomId = req.params.roomId
+        const clientId = req.params.clientId
+        await ClientService.connectClientWithRoom(adminId, password, roomId, clientId, filename)
+        utils.success(res, 200)
+    } catch(error) {
+        if (req.file && req.file.path) {
+            fs.unlink(req.file.path, unlinkErr => {
+              if (unlinkErr) console.error("Failed to delete file:", unlinkErr);
+            });
+        }
+        next(error)
+    }
+}
+
 module.exports = {
     createClient,
     getClientInfo,
     updateClient,
     deleteClient,
-    getClientsList
+    getClientsList,
+    connectClientWithRoom
 }

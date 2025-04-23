@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
+const upload = require('../multer/multer');
+
 const JWTAdminMiddleware = require('../middlewares/JWTAdminMiddleware')
 const RoomController = require('../controllers/room.controller')
+const ClientController = require('../controllers/client.controller')
+const getClientMiddleware = require('../middlewares/getClientMiddleware')
 
 router.post('/', JWTAdminMiddleware, RoomController.createRoom)
 router.get('/code/:code', RoomController.isRoomOpen)
@@ -12,6 +16,8 @@ router.delete('/:roomId', JWTAdminMiddleware, RoomController.deleteRoom)
 router.patch('/:roomId/open', JWTAdminMiddleware, RoomController.openRoom)
 router.patch('/:roomId/close', JWTAdminMiddleware, RoomController.closeRoom)
 
-// router.post('/:roomId/client')
+router.post('/:roomId/clients/:clientId', getClientMiddleware, upload.single('file'), ClientController.connectClientWithRoom) // only for admin or you need to send password
+// router.get('/:roomId/clients') // only for admin
+// router.delete('/:roomId/clients/:clientId) // only for admin
 
 module.exports = router

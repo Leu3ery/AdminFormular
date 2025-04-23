@@ -1,4 +1,4 @@
-const {Clients, Rooms} = require('../models')
+const {Clients, Rooms, RoomsClients} = require('../models')
 const { Op } = require("sequelize");
 const utils = require('./utils')
 const fs = require('fs')
@@ -91,10 +91,74 @@ async function getClientsList(adminId, query) {
     return clients
 }
 
+async function connectClientWithRoom(adminId, password, roomId, clientId, filename) {
+    if (adminId) {
+        const admin = await utils.findAdmin(adminId)
+        const client = await utils.findClient(clientId)
+        const room = await Rooms.findOne({
+            where: {
+                id: roomId,
+                isActivate: true
+            }
+        })
+        if (!room) {
+            throw createError(404, "Room was not found")
+        }
+        const location = await utils.findLocation(room.LocationId)
+        if (!await location.hasAdmin(admin) && !admin.isSuperAdmin) {
+            throw createError(403, "You has no premmision")
+        }
+        if (await room.hasClient(client)) {
+            throw createError(400, "You are already in this room")
+        }
+        const game = await utils.findGame(room.GameId)
+        if (game.maxPlayers <= await room.countClients()) {
+            throw createError(400, "Room is already full")
+        }
+
+        await RoomsClients.create({
+            ClientId: clientId,
+            RoomId: roomId,
+            clientSignature: filename
+        })
+    } else {
+        const client = await Clients.findOne({
+            where: {
+                id: clientId,
+                password: password
+            }
+        })
+
+        const room = await Rooms.findOne({
+            where: {
+                id: roomId,
+                isActivate: true
+            }
+        })
+        if (!room) {
+            throw createError(404, "Room was not found")
+        }
+        if (await room.hasClient(client)) {
+            throw createError(400, "You are already in this room")
+        }
+        const game = await utils.findGame(room.GameId)
+        if (game.maxPlayers <= await room.countClients()) {
+            throw createError(400, "Room is already full")
+        }
+
+        await RoomsClients.create({
+            ClientId: clientId,
+            RoomId: roomId,
+            clientSignature: filename
+        })
+    }
+}
+
 module.exports = {
     createClient,
     getClientInfo,
     updateClient,
     deleteClient,
-    getClientsList
+    getClientsList,
+    connectClientWithRoom
 }

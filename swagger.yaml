@@ -1000,7 +1000,49 @@ paths:
               example:
                 {
                   "success": true,
-                  "isRoomOpen": true
+                  "id": 2
+                }
+  /rooms/{roomId}/clients/{clientId}:
+    post:
+      summary: "worse endpoint ever (i konw) --- connect client with room if you has password of JWT (you are admin)"
+      security: 
+        - {}
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          schema: 
+            type: integer
+        - in: path
+          name: clientId
+          required: true
+          schema: 
+            type: integer
+        - in: query
+          name: password
+          required: false
+          schema: 
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: "Client was added to room"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true
                 }
   /clients:
     post:
