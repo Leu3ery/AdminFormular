@@ -107,11 +107,37 @@ async function connectClientWithRoom(req, res, next) {
     }
 }
 
+
+async function deleteClientFromRoom(req, res, next) {
+    try {
+        const roomId = req.params.roomId
+        const clientId = req.params.clientId
+        const adminId = req.admin.id
+        await ClientService.deleteClientFromRoom(adminId, clientId, roomId)
+        utils.success(res, 200)
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function getListOfClients(req, res, next) {
+    try {
+        const roomId = req.params.roomId
+        const adminId = req.admin.id
+        const data = await ClientService.getListOfClients(adminId, roomId)
+        utils.success(res, 200, {data})
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     createClient,
     getClientInfo,
     updateClient,
     deleteClient,
     getClientsList,
-    connectClientWithRoom
+    connectClientWithRoom,
+    deleteClientFromRoom,
+    getListOfClients
 }

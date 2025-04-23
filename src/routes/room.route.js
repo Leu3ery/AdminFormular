@@ -17,7 +17,8 @@ router.patch('/:roomId/open', JWTAdminMiddleware, RoomController.openRoom)
 router.patch('/:roomId/close', JWTAdminMiddleware, RoomController.closeRoom)
 
 router.post('/:roomId/clients/:clientId', getClientMiddleware, upload.single('file'), ClientController.connectClientWithRoom) // only for admin or you need to send password
-// router.get('/:roomId/clients') // only for admin
-// router.delete('/:roomId/clients/:clientId) // only for admin
+router.delete('/:roomId/clients/:clientId', JWTAdminMiddleware, ClientController.deleteClientFromRoom) // only for admin
+router.get('/:roomId/clients', JWTAdminMiddleware, ClientController.getListOfClients) // only for admin
+
 
 module.exports = router

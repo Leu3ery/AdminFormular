@@ -1044,6 +1044,69 @@ paths:
                 {
                   "success": true
                 }
+    delete:
+      summary: "remove client from room"
+      security: 
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          schema: 
+            type: integer
+        - in: path
+          name: clientId
+          required: true
+          schema: 
+            type: integer
+      responses:
+        "200":
+          description: "Client was removed from room"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true
+                }
+  /rooms/{roomId}/clients:
+    get:
+      summary: "returns list of clients in room if you are admin"
+      security: 
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "list of clients in room"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 19,
+                      "firstName": "Valentyn",
+                      "lastName": "Hvozdenko",
+                      "birthday": "2025-04-21T00:00:00.000Z",
+                      "phone": "+4368120225819",
+                      "mail": null,
+                      "photo": "1745271118199-847610100.png",
+                      "password": "GK8Yn33z",
+                      "createdAt": "2025-04-21T21:31:58.249Z",
+                      "updatedAt": "2025-04-21T21:31:58.249Z",
+                      "RoomsClients": {
+                        "clientSignature": null,
+                        "ClientId": 19,
+                        "RoomId": 2
+                      }
+                    }
+                  ]
+                }
   /clients:
     post:
       summary: "create new client (if you are admin of has code for room)"

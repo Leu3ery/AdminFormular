@@ -154,11 +154,53 @@ async function connectClientWithRoom(adminId, password, roomId, clientId, filena
     }
 }
 
+async function deleteClientFromRoom(adminId, clientId, roomId) {
+    const admin = await utils.findAdmin(adminId)
+    const client = await utils.findClient(clientId)
+    const room = await utils.findRoom(roomId)
+
+    const roomsClients = await RoomsClients.findOne({
+        where: {
+            RoomId: roomId,
+            ClientId: clientId
+        }
+    })
+    if (!roomsClients) {
+        throw createError(404, "This user is not in this room")
+    }
+
+    const location = await utils.findLocation(room.LocationId)
+    if (!await location.hasAdmin(admin) && !admin.isSuperAdmin) {
+        throw createError(403, "You has no premmision")
+    }
+
+    if (roomsClients.clientSignature) {
+        const photoPath = path.join(__dirname, "../public/", roomsClients.clientSignature)
+        if (fs.existsSync(photoPath)) fs.unlinkSync(photoPath)
+    }
+    await roomsClients.destroy()
+}
+
+async function getListOfClients(adminId, roomId) {
+    const admin = await utils.findAdmin(adminId)
+    const room = await utils.findRoom(roomId)
+
+    const location = await utils.findLocation(room.LocationId)
+    if (!await location.hasAdmin(admin) && !admin.isSuperAdmin) {
+        throw createError(403, "You has no premmision")
+    }
+
+    const data = await room.getClients()
+    return data
+}
+
 module.exports = {
     createClient,
     getClientInfo,
     updateClient,
     deleteClient,
     getClientsList,
-    connectClientWithRoom
+    connectClientWithRoom,
+    deleteClientFromRoom,
+    getListOfClients
 }
