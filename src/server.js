@@ -5,7 +5,7 @@ const superAdmin = require('./config/superAdmin')
 
 sequelize.sync().then(() => {
     app.listen(config.PORT || 3000, () => {
-        // superAdmin()
+        superAdmin()
         console.log('Server runs...')
     })
 })

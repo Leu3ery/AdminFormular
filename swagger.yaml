@@ -459,8 +459,6 @@ paths:
           required: true
           schema:
             type: integer
-      security:
-        - bearerAuth: []
       responses:
         "200":
           description:
