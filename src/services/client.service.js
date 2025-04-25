@@ -194,6 +194,25 @@ async function getListOfClients(adminId, roomId) {
     return data
 }
 
+async function getListOfRoomsOfClient(adminId, password, clientId) {
+    if (adminId) {
+        const admin = await utils.findAdmin(adminId)
+        const client = await utils.findClient(clientId)
+        return client.getRooms()
+    } else {
+        const client = await Clients.findOne({
+            where: {
+                id: clientId,
+                password: password
+            }
+        })
+        if (!client) {
+            throw createError(404, "Client not found")
+        }
+        return client.getRooms()
+    }
+}
+
 module.exports = {
     createClient,
     getClientInfo,
@@ -202,5 +221,6 @@ module.exports = {
     getClientsList,
     connectClientWithRoom,
     deleteClientFromRoom,
-    getListOfClients
+    getListOfClients,
+    getListOfRoomsOfClient
 }

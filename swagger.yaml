@@ -1327,6 +1327,51 @@ paths:
       responses:
         "200":
           description: "client was deleted"
+  /clients/{clientId}/rooms:
+    get:
+      summary: "get list of clients rooms (if you has password or JWT)"
+      security: 
+        - {}
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: password
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "list of clients rooms"
+          content:
+            application/json:
+              example:
+                {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 2,
+                      "gameTime": 0,
+                      "isActivate": true,
+                      "code": 6765,
+                      "createdAt": "2025-04-21T14:13:27.747Z",
+                      "updatedAt": "2025-04-21T14:13:27.747Z",
+                      "AdminId": 1,
+                      "GameId": 2,
+                      "LocationId": 1,
+                      "RoomsClients": {
+                        "clientSignature": "1745523125867-283085174.pdf",
+                        "ClientId": 22,
+                        "RoomId": 2
+                      }
+                    }
+                  ]
+                }
+
 components:
   securitySchemes:
     bearerAuth:

@@ -131,6 +131,18 @@ async function getListOfClients(req, res, next) {
     }
 }
 
+async function getListOfRoomsOfClient(req, res, next) {
+    try {
+        const adminId = req.admin.id
+        const password = req.password
+        const clientId = req.params.clientId
+        const data = await ClientService.getListOfRoomsOfClient(adminId, password, clientId)
+        utils.success(res, 200, {data})
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     createClient,
     getClientInfo,
@@ -139,5 +151,6 @@ module.exports = {
     getClientsList,
     connectClientWithRoom,
     deleteClientFromRoom,
-    getListOfClients
+    getListOfClients,
+    getListOfRoomsOfClient
 }

@@ -12,4 +12,6 @@ router.get('/:clientId', getClientMiddleware, ClientController.getClientInfo)
 router.patch('/:clientId', JWTAdminMiddleware, upload.single('file'), ClientController.updateClient)
 router.delete('/:clientId', JWTAdminMiddleware, ClientController.deleteClient)
 
+router.get('/:clientId/rooms', getClientMiddleware, ClientController.getListOfRoomsOfClient)
+
 module.exports = router

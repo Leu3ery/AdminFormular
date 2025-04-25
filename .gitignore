@@ -15,3 +15,4 @@ node_modules/
 src/public/*
 
 src/frontend/
+src/database.sqlite
