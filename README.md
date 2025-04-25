@@ -32,6 +32,7 @@ From the project root:
 
 ```
 cd src
+mkdir public
 node server.js
 ```
 
